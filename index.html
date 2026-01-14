@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo_white.svg" id="favicon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agentinc</title>
+    <script>
+      // Set favicon based on browser's color scheme preference
+      (function() {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const favicon = document.getElementById('favicon');
+        if (favicon) {
+          favicon.href = isDark ? '/logo_white.svg' : '/logo_black.svg';
+        }
+
+        // Listen for changes in browser theme
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          const favicon = document.getElementById('favicon');
+          if (favicon) {
+            favicon.href = e.matches ? '/logo_white.svg' : '/logo_black.svg';
+          }
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

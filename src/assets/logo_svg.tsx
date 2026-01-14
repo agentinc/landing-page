@@ -1,0 +1,44 @@
+import React from 'react'
+
+interface LogoSvgProps extends React.SVGProps<SVGSVGElement> {
+  className?: string;
+  customColor?: string;
+}
+
+const LogoSvg: React.FC<LogoSvgProps> = ({ className, customColor = '#231f20', ...props }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 925.07 897.28"
+      className={className}
+      {...props}
+    >
+      <path
+        fill={customColor}
+        d="M688.91,896.78h-106.66l-18.39-39.14c-.09.01-.17.02-.26.02-41.51-87.54-83.03-175.08-124.45-262.66-.9-1.91-1.09-4.92-.24-6.78,16.06-34.91,32.33-69.74,48.56-104.57,1.02-2.18,2.15-4.29,3.53-7.03,5,10.45,9.72,20.17,14.33,29.94,31.19,66.03,62.36,132.08,93.88,198.79,27.76,59.04,55.53,118.07,83.19,177.15-.02.11-.04.22-.05.33l6.56,13.95Z"
+      />
+      <path
+        fill={customColor}
+        stroke={customColor}
+        strokeMiterlimit={10}
+        d="M888.41,896.78h-108.21l-28.6-60.98h.03c-1.83-3.89-3.66-7.77-5.49-11.65-85.08-180.43-169.96-360.44-255.32-541.48L208.24,896.78h-110.17l110.63-238.05L489.9,53.66l398.51,843.12Z"
+      />
+      <polygon
+        fill="none"
+        points="888.41 896.78 98.08 896.78 208.71 658.72 489.9 53.66 888.41 896.78"
+      />
+      <rect
+        fill="none"
+        stroke={customColor}
+        strokeMiterlimit={10}
+        strokeWidth={0.25}
+        x=".12"
+        y=".12"
+        width="924.82"
+        height="896.65"
+      />
+    </svg>
+  )
+}
+
+export default LogoSvg
