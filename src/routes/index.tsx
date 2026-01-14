@@ -98,7 +98,7 @@ function LandingPage() {
       <section id='contact' className='py-24 px-6'>
         <div className='container mx-auto text-center max-w-2xl'>
           <h2 className='text-3xl font-bold mb-4'>
-            Ready to launch your AI company?
+            Ready to launch? Your digital copilot awaits you.
           </h2>
           <p className='text-muted-foreground mb-8'>
             Join thousands of entrepreneurs building the future of business.
@@ -114,7 +114,7 @@ function LandingPage() {
             <Logo width={25} color='#62758e' />
             <span>agentinc</span>
           </div>
-          <p>&copy; 2025 agentinc. All rights reserved.</p>
+          <p>&copy; 2026 agentinc. All rights reserved.</p>
         </div>
       </footer>
     </div>

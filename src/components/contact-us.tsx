@@ -57,8 +57,16 @@ export function ContactUs() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={'https://api.web3forms.com/submit'} method='POST' className='space-y-4'>
-          <input type="hidden" name="access_key" value={import.meta.env.VITE_PUBLIC_WEB3FORMS_ACCESS_KEY} />
+        <form
+          action={'https://api.web3forms.com/submit'}
+          method='POST'
+          className='space-y-4'
+        >
+          <input
+            type='hidden'
+            name='access_key'
+            value={import.meta.env.VITE_PUBLIC_WEB3FORMS_ACCESS_KEY}
+          />
           <div className='space-y-2'>
             <Label htmlFor='fullName'>Full Name</Label>
             <Input
