@@ -65,8 +65,7 @@ function LandingPage() {
                 <Bot className='h-10 w-10 text-primary mb-2' />
                 <CardTitle>AI-Powered Workforce</CardTitle>
                 <CardDescription>
-                  Deploy specialized AI agents that work 24/7. From customer
-                  service to data analysis, your digital team never sleeps.
+                  Deploy specialized AI agents that work 24/7. Your digital team never sleeps.
                 </CardDescription>
               </CardHeader>
             </Card>
