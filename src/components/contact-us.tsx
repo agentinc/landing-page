@@ -147,6 +147,7 @@ export function ContactUs() {
                 handleSelectChange('who', value)
               }
               required
+              name='whoAreYou'
             >
               <SelectTrigger id='who' className='w-full'>
                 <SelectValue placeholder='Who are you' />
@@ -220,6 +221,7 @@ export function ContactUs() {
               onValueChange={(value) =>
                 handleSelectChange('heardAboutUs', value)
               }
+              name='hearAboutUs'
             >
               <SelectTrigger id='heardAboutUs' className='w-full'>
                 <SelectValue placeholder='Select an option' />
