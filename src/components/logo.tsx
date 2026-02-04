@@ -17,17 +17,9 @@ const Logo = ({ color, width }: { color?: string; width?: number }) => {
   return (
     <div
       className={cn(
-        'border-[2.5px] rounded-[6.5px] object-cover',
-        width ? `w-[${width}px] h-[${width}px]` : 'w-8 h-8',
-        color ? `` : 'border-primary'
+        'object-cover',
+        width ? `w-[${width}px] h-[${width}px]` : 'w-8 h-8'
       )}
-      style={
-        color
-          ? {
-              borderColor: color,
-            }
-          : {}
-      }
     >
       <LogoSvg
         customColor={
