@@ -210,7 +210,7 @@ export function ContactUs() {
             />
           </div>
 
-          <div className='space-y-2'>
+          <div className='space-y-2 w-full'>
             <Label htmlFor='heardAboutUs'>
               How did you hear about us?{' '}
               <span className='text-muted-foreground'>(optional)</span>
@@ -221,7 +221,7 @@ export function ContactUs() {
                 handleSelectChange('heardAboutUs', value)
               }
             >
-              <SelectTrigger id='heardAboutUs'>
+              <SelectTrigger id='heardAboutUs' className='w-full'>
                 <SelectValue placeholder='Select an option' />
               </SelectTrigger>
               <SelectContent>
