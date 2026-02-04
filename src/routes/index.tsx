@@ -36,10 +36,23 @@ function LandingPage() {
         </div>
       </header>
       {/* Hero Section */}
-      <section className='flex-1 flex items-center justify-center py-24 px-6'>
+      
+     <section className='relative overflow-hidden flex-1 flex items-center justify-center py-24 px-6 isolate'>
+        <div className="absolute inset-0 pointer-events-none -z-10">
+          {/* Purple top-left */}
+          <div className="absolute -top-40 -left-40 w-80 h-80 bg-purple-500/20 dark:bg-purple-500/15 rounded-full blur-3xl" />
+          {/* Baby blue bottom-right */}
+          <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-sky-300/20 dark:bg-sky-300/15 rounded-full blur-3xl" />
+          <div
+            className="absolute inset-0 opacity-[0.04] dark:opacity-[0.5]"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }}
+          />
+        </div>
         <div className='container mx-auto text-center max-w-3xl'>
           <h1 className='text-5xl font-bold tracking-tight mb-6'>
-            Build Your Digital Company with AI Agents
+            Build Your Digital Workspace with Autonomous AI Agents
           </h1>
           <p className='text-xl text-muted-foreground mb-8'>
             Create, deploy, and scale your own AI-powered business. Let
@@ -72,10 +85,9 @@ function LandingPage() {
             <Card>
               <CardHeader>
                 <Building2 className='h-10 w-10 text-primary mb-2' />
-                <CardTitle>Complete Infrastructure</CardTitle>
+                <CardTitle>Multi-tenant Support</CardTitle>
                 <CardDescription>
-                  Everything you need to run a digital business. Workflows,
-                  integrations, and tools all in one platform.
+                  Easily onboard teams and use granular permissions to control employee access to specific workflows.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -94,7 +106,20 @@ function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section id='contact' className='py-24 px-6'>
+     <section id='contact' className='relative overflow-hidden flex-1 flex items-center justify-center py-24 px-6 isolate'>
+        {/* Background decorations */}
+        <div className="absolute inset-0 pointer-events-none -z-10">
+           {/* Purple top-left */}
+          <div className="absolute -top-40 -left-40 w-80 h-80 bg-purple-500/20 dark:bg-purple-500/15 rounded-full blur-3xl" />
+          {/* Baby blue bottom-right */}
+          <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-sky-300/20 dark:bg-sky-300/15 rounded-full blur-3xl" />
+          <div
+            className="absolute inset-0 opacity-[0.04] dark:opacity-[0.5]"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }}
+          />
+        </div>
         <div className='container mx-auto text-center max-w-2xl'>
           <h2 className='text-3xl font-bold mb-4'>
             Ready to launch? Your digital copilot awaits you.
@@ -110,7 +135,7 @@ function LandingPage() {
       <footer className='border-t border-border py-8 px-6'>
         <div className='container mx-auto flex items-center justify-between text-sm text-muted-foreground'>
           <div className='flex items-center gap-2'>
-            <Logo width={25} color='#62758e' />
+            <Logo width={25} color='var(--muted-foreground)' />
             <span>agentinc</span>
           </div>
           <p>&copy; 2026 agentinc. All rights reserved.</p>

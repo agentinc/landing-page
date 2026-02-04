@@ -11,6 +11,15 @@ import {
   SelectValue,
 } from '@/shadcn/components/ui/select';
 import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shadcn/components/ui/dropdown-menu';
+import { ChevronDown } from 'lucide-react';
+import {
   Card,
   CardContent,
   CardDescription,
@@ -23,20 +32,33 @@ interface ContactFormData {
   company: string;
   phoneNumber: string;
   email: string;
-  companySize: string;
   message: string;
   heardAboutUs: string;
+  who: string;
 }
 
 export function ContactUs() {
+  const [workflows, setWorkflows] = useState<Record<string, boolean>>({
+    'Customer Support': false,
+    'HR and Personnel': false,
+    'Marketing': false,
+    'Engineering Solutions': false,
+    'Software Development': false,
+    'Personal Workflows': false,
+  });
+
+  const handleWorkflowChange = (workflow: string, checked: boolean) => {
+    setWorkflows((prev) => ({ ...prev, [workflow]: checked }));
+  };
+
   const [formData, setFormData] = useState<ContactFormData>({
     fullName: '',
     company: '',
     phoneNumber: '',
     email: '',
-    companySize: '',
     message: '',
     heardAboutUs: '',
+    who: '',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -118,28 +140,66 @@ export function ContactUs() {
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='companySize'>Company Size</Label>
+            <Label htmlFor='who'>Who are you</Label>
             <Select
-              value={formData.companySize}
+              value={formData.who}
               onValueChange={(value) =>
-                handleSelectChange('companySize', value)
+                handleSelectChange('who', value)
               }
               required
+              name='whoAreYou'
             >
-              <SelectTrigger id='companySize'>
-                <SelectValue placeholder='Select company size' />
+              <SelectTrigger id='who' className='w-full'>
+                <SelectValue placeholder='Who are you' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='1-10'>1-10 employees</SelectItem>
-                <SelectItem value='11-50'>11-50 employees</SelectItem>
-                <SelectItem value='51-200'>51-200 employees</SelectItem>
-                <SelectItem value='201-500'>201-500 employees</SelectItem>
-                <SelectItem value='501+'>501+ employees</SelectItem>
+                <SelectItem value='founder'>Founder</SelectItem>
+                <SelectItem value='entrepreneur'>Entrepreneur</SelectItem>
+                <SelectItem value='software engineer'>Software Engineer</SelectItem>
+                <SelectItem value='product manager'>Product Manager</SelectItem>
+                <SelectItem value='marketing'>Marketing</SelectItem>
+                <SelectItem value='business developer'>Business Developer</SelectItem>
+                <SelectItem value='other'>Other</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className='space-y-2'>
+            <Label>What workflows are you planning to use agentinc for?</Label>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant='outline' className='w-full justify-between font-normal'>
+                  {Object.values(workflows).some(Boolean)
+                    ? Object.entries(workflows)
+                        .filter(([, v]) => v)
+                        .map(([k]) => k)
+                        .join(', ')
+                    : 'Select workflows'}
+                  <ChevronDown className='h-4 w-4 opacity-50' />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className='w-[var(--radix-dropdown-menu-trigger-width)]'>
+                <DropdownMenuLabel>Workflows</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {Object.keys(workflows).map((workflow) => (
+                  <DropdownMenuCheckboxItem
+                    key={workflow}
+                    checked={workflows[workflow]}
+                    onCheckedChange={(checked) => handleWorkflowChange(workflow, checked)}
+                  >
+                    {workflow}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {Object.entries(workflows)
+              .filter(([, v]) => v)
+              .map(([k]) => (
+                <input key={k} type='hidden' name='workflows' value={k} />
+              ))}
+          </div>
+
+          <div className='space-y-4'>
             <Label htmlFor='message'>Message</Label>
             <Textarea
               id='message'
@@ -151,7 +211,7 @@ export function ContactUs() {
             />
           </div>
 
-          <div className='space-y-2'>
+          <div className='space-y-2 w-full'>
             <Label htmlFor='heardAboutUs'>
               How did you hear about us?{' '}
               <span className='text-muted-foreground'>(optional)</span>
@@ -161,8 +221,9 @@ export function ContactUs() {
               onValueChange={(value) =>
                 handleSelectChange('heardAboutUs', value)
               }
+              name='hearAboutUs'
             >
-              <SelectTrigger id='heardAboutUs'>
+              <SelectTrigger id='heardAboutUs' className='w-full'>
                 <SelectValue placeholder='Select an option' />
               </SelectTrigger>
               <SelectContent>
