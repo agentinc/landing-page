@@ -73,12 +73,12 @@ export function ContactUs() {
   return (
     <Card className='w-full max-w-lg mx-auto'>
       <CardHeader>
-        <CardTitle>Contact Us</CardTitle>
+        <CardTitle className='text-2xl'>Contact Us</CardTitle>
         <CardDescription>
           Fill out the form below and we'll get back to you shortly.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className='text-left'>
         <form
           action={'https://api.web3forms.com/submit'}
           method='POST'
@@ -90,7 +90,7 @@ export function ContactUs() {
             value={import.meta.env.VITE_PUBLIC_WEB3FORMS_ACCESS_KEY}
           />
           <div className='space-y-2'>
-            <Label htmlFor='fullName'>Full Name</Label>
+            <Label htmlFor='fullName' className="text-base font-normal">Full Name</Label>
             <Input
               id='fullName'
               name='fullName'
@@ -98,11 +98,12 @@ export function ContactUs() {
               value={formData.fullName}
               onChange={handleInputChange}
               required
+              className="h-12 bg-muted/50 rounded-2xl"
             />
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='company'>Company</Label>
+            <Label htmlFor='company' className="text-base font-normal">Company</Label>
             <Input
               id='company'
               name='company'
@@ -110,11 +111,12 @@ export function ContactUs() {
               value={formData.company}
               onChange={handleInputChange}
               required
+              className="h-12 bg-muted/50 rounded-2xl"
             />
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='phoneNumber'>Phone Number</Label>
+            <Label htmlFor='phoneNumber' className="text-base font-normal">Phone Number</Label>
             <Input
               id='phoneNumber'
               name='phoneNumber'
@@ -123,11 +125,12 @@ export function ContactUs() {
               value={formData.phoneNumber}
               onChange={handleInputChange}
               required
+              className="h-12 bg-muted/50 rounded-2xl"
             />
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='email'>Email</Label>
+            <Label htmlFor='email' className="text-base font-normal">Email</Label>
             <Input
               id='email'
               name='email'
@@ -136,11 +139,11 @@ export function ContactUs() {
               value={formData.email}
               onChange={handleInputChange}
               required
-            />
+              className="h-12 bg-muted/50 rounded-2xl"/>
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='who'>Who are you</Label>
+            <Label htmlFor='who' className="text-base font-normal">Who are you</Label>
             <Select
               value={formData.who}
               onValueChange={(value) =>
@@ -148,8 +151,8 @@ export function ContactUs() {
               }
               required
             >
-              <SelectTrigger id='who' className='w-full'>
-                <SelectValue placeholder='Who are you' />
+              <SelectTrigger id='who' className='w-full !h-12 bg-muted/50 rounded-2xl'>
+                <SelectValue placeholder='I am a..' />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value='founder'>Founder</SelectItem>
@@ -164,17 +167,19 @@ export function ContactUs() {
           </div>
 
           <div className='space-y-2'>
-            <Label>What workflows are you planning to use agentinc for?</Label>
-            <DropdownMenu>
+            <Label htmlFor='workflows' className="text-base font-normal">I will use Agentinc for</Label>
+            <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
-                <Button variant='outline' className='w-full justify-between font-normal'>
-                  {Object.values(workflows).some(Boolean)
-                    ? Object.entries(workflows)
-                        .filter(([, v]) => v)
-                        .map(([k]) => k)
-                        .join(', ')
-                    : 'Select workflows'}
-                  <ChevronDown className='h-4 w-4 opacity-50' />
+                <Button variant='outline' className={`w-full h-12 justify-between font-normal text-left bg-muted/50 rounded-2xl hover:bg-muted ${!Object.values(workflows).some(Boolean) ? 'text-muted-foreground' : ''}`}>
+                  <span className='truncate'>
+                    {Object.values(workflows).some(Boolean)
+                      ? Object.entries(workflows)
+                          .filter(([, v]) => v)
+                          .map(([k]) => k)
+                          .join(', ')
+                      : 'Select workflows'}
+                  </span>
+                  <ChevronDown className='h-4 w-4 opacity-50 shrink-0' />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className='w-[var(--radix-dropdown-menu-trigger-width)]'>
@@ -198,22 +203,23 @@ export function ContactUs() {
               ))}
           </div>
 
-          <div className='space-y-4'>
-            <Label htmlFor='message'>Message</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='message' className="text-base font-normal">Message</Label>
             <Textarea
               id='message'
               name='message'
-              placeholder='Tell us more about your company, what job roles would you like to hire...'
+              placeholder='Tell us more about your company, what job roles would you like to hire?'
               value={formData.message}
               onChange={handleInputChange}
               required
+              className="min-h-[120px] bg-muted/50 rounded-2xl resize-none"
             />
           </div>
 
-          <div className='space-y-2 w-full'>
-            <Label htmlFor='heardAboutUs'>
+          <div className='space-y-2'>
+            <Label htmlFor='heardAboutUs' className="text-base font-normal">
               How did you hear about us?{' '}
-              <span className='text-muted-foreground'>(optional)</span>
+              <span className='text-muted-foreground text-sm'>(optional)</span>
             </Label>
             <Select
               value={formData.heardAboutUs}
@@ -221,7 +227,7 @@ export function ContactUs() {
                 handleSelectChange('heardAboutUs', value)
               }
             >
-              <SelectTrigger id='heardAboutUs' className='w-full'>
+              <SelectTrigger id='heardAboutUs' className='w-full !h-12 bg-muted/50 rounded-2xl'>
                 <SelectValue placeholder='Select an option' />
               </SelectTrigger>
               <SelectContent>
@@ -235,7 +241,7 @@ export function ContactUs() {
             </Select>
           </div>
 
-          <Button type='submit' className='w-full'>
+          <Button type='submit' className='w-full h-12 rounded-2xl text-base font-medium'>
             Submit
           </Button>
         </form>
