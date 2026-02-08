@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/shadcn/components/ui/button';
 import { Input } from '@/shadcn/components/ui/input';
 import { Label } from '@/shadcn/components/ui/label';
@@ -50,6 +50,36 @@ export function ContactUs() {
   const handleWorkflowChange = (workflow: string, checked: boolean) => {
     setWorkflows((prev) => ({ ...prev, [workflow]: checked }));
   };
+
+  // Controlled state for dropdowns
+  const [workflowsOpen, setWorkflowsOpen] = useState(false);
+  const [whoOpen, setWhoOpen] = useState(false);
+  const [heardAboutUsOpen, setHeardAboutUsOpen] = useState(false);
+
+  // Close all dropdowns on scroll (but not if event is inside a dropdown)
+  const closeAllDropdowns = useCallback((e: Event) => {
+    const target = e.target as HTMLElement;
+    // Don't close if the event originated from inside a dropdown/select content
+    if (target?.closest('[data-radix-popper-content-wrapper]') ||
+        target?.closest('[data-radix-select-content]') ||
+        target?.closest('[data-radix-dropdown-menu-content]')) {
+      return;
+    }
+    setWorkflowsOpen(false);
+    setWhoOpen(false);
+    setHeardAboutUsOpen(false);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', closeAllDropdowns, true);
+    window.addEventListener('wheel', closeAllDropdowns, true);
+    window.addEventListener('touchmove', closeAllDropdowns, true);
+    return () => {
+      window.removeEventListener('scroll', closeAllDropdowns, true);
+      window.removeEventListener('wheel', closeAllDropdowns, true);
+      window.removeEventListener('touchmove', closeAllDropdowns, true);
+    };
+  }, [closeAllDropdowns]);
 
   const [formData, setFormData] = useState<ContactFormData>({
     fullName: '',
@@ -150,6 +180,8 @@ export function ContactUs() {
                 handleSelectChange('who', value)
               }
               required
+              open={whoOpen}
+              onOpenChange={setWhoOpen}
             >
               <SelectTrigger id='who' className='w-full !h-12 bg-muted/50 rounded-2xl'>
                 <SelectValue placeholder='I am a..' />
@@ -168,7 +200,7 @@ export function ContactUs() {
 
           <div className='space-y-2'>
             <Label htmlFor='workflows' className="text-base font-normal">I will use Agentinc for</Label>
-            <DropdownMenu modal={false}>
+            <DropdownMenu modal={false} open={workflowsOpen} onOpenChange={setWorkflowsOpen}>
               <DropdownMenuTrigger asChild>
                 <Button variant='outline' className={`w-full h-12 justify-between font-normal text-left bg-muted/50 rounded-2xl hover:bg-muted ${!Object.values(workflows).some(Boolean) ? 'text-muted-foreground' : ''}`}>
                   <span className='truncate'>
@@ -188,6 +220,7 @@ export function ContactUs() {
                 {Object.keys(workflows).map((workflow) => (
                   <DropdownMenuCheckboxItem
                     key={workflow}
+                    onSelect={(e) => e.preventDefault()}
                     checked={workflows[workflow]}
                     onCheckedChange={(checked) => handleWorkflowChange(workflow, checked)}
                   >
@@ -226,6 +259,8 @@ export function ContactUs() {
               onValueChange={(value) =>
                 handleSelectChange('heardAboutUs', value)
               }
+              open={heardAboutUsOpen}
+              onOpenChange={setHeardAboutUsOpen}
             >
               <SelectTrigger id='heardAboutUs' className='w-full !h-12 bg-muted/50 rounded-2xl'>
                 <SelectValue placeholder='Select an option' />
