@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "landing-page-dev",
+  "route": "withagentinc.com",
+  "env": {
+    "dev": {
+      "route": "dev-demo.withagentinc.com",
+    },
+  },
+}
