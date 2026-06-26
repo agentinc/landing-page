@@ -1,12 +1,11 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
-import { ThemeProvider } from '@/components/theme-provider';
+import { CursorGlow } from '@/components/cursor-glow';
 
 export const Route = createRootRoute({
   component: () => (
-    <ThemeProvider defaultTheme="system" storageKey="agentinc-theme">
-      <div className="min-h-screen bg-background text-foreground">
-        <Outlet />
-      </div>
-    </ThemeProvider>
+    <div className="min-h-screen bg-background text-foreground">
+      <CursorGlow />
+      <Outlet />
+    </div>
   ),
 });

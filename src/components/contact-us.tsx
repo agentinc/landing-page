@@ -101,7 +101,7 @@ export function ContactUs() {
   };
 
   return (
-    <Card className='w-full max-w-lg mx-auto'>
+    <Card className='w-full max-w-lg mx-auto bg-white/[0.03] border-white/[0.08] text-white'>
       <CardHeader>
         <CardTitle className='text-2xl'>Contact Us</CardTitle>
         <CardDescription>
@@ -202,16 +202,14 @@ export function ContactUs() {
             <Label htmlFor='workflows' className="text-base font-normal">I will use Agentinc for</Label>
             <DropdownMenu modal={false} open={workflowsOpen} onOpenChange={setWorkflowsOpen}>
               <DropdownMenuTrigger asChild>
-                <Button variant='outline' className={`w-full h-12 justify-between font-normal text-left bg-muted/50 rounded-2xl hover:bg-muted ${!Object.values(workflows).some(Boolean) ? 'text-muted-foreground' : ''}`}>
-                  <span className='truncate'>
-                    {Object.values(workflows).some(Boolean)
-                      ? Object.entries(workflows)
-                          .filter(([, v]) => v)
-                          .map(([k]) => k)
-                          .join(', ')
-                      : 'Select workflows'}
-                  </span>
-                  <ChevronDown className='h-4 w-4 opacity-50 shrink-0' />
+                <Button variant='outline' className='w-full justify-between font-normal hover:bg-transparent hover:text-inherit'>
+                  {Object.values(workflows).some(Boolean)
+                    ? Object.entries(workflows)
+                        .filter(([, v]) => v)
+                        .map(([k]) => k)
+                        .join(', ')
+                    : 'Select workflows'}
+                  <ChevronDown className='h-4 w-4 opacity-50' />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className='w-[var(--radix-dropdown-menu-trigger-width)]'>
@@ -276,7 +274,7 @@ export function ContactUs() {
             </Select>
           </div>
 
-          <Button type='submit' className='w-full h-12 rounded-2xl text-base font-medium'>
+          <Button type='submit' className='w-full bg-emerald hover:bg-emerald-dark text-black font-semibold rounded-md h-11 transition-colors duration-200'>
             Submit
           </Button>
         </form>
