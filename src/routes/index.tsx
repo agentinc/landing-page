@@ -516,29 +516,28 @@ function BillingButton({ label, interval, activeBilling, onBillingChange }: { la
 function PricingGroup({ title, plans, billing, onSelectPlan }: { title: string; plans: PricingPlan[]; billing: BillingInterval; onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
   return (
     <div>
-      <div className="flex items-center justify-between border-b border-border pb-4">
-        <h3 className="text-lg font-semibold">{title}</h3>
-        <span className="hidden text-xs uppercase tracking-wide text-muted-foreground lg:block">Agents · term · marketplace · PAYG credits</span>
-      </div>
-      <div>
+      <h3 className="mb-5 text-lg font-semibold">{title}</h3>
+      <div className={`grid items-stretch gap-4 ${getPricingGridClass(plans.length)}`}>
         {plans.map((plan) => (
-          <PricingRow key={plan.id} plan={plan} billing={billing} onSelectPlan={onSelectPlan} />
+          <PricingPlanCard key={plan.id} plan={plan} billing={billing} onSelectPlan={onSelectPlan} />
         ))}
       </div>
     </div>
   );
 }
 
-function PricingRow({ plan, billing, onSelectPlan }: { plan: PricingPlan; billing: BillingInterval; onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
+function PricingPlanCard({ plan, billing, onSelectPlan }: { plan: PricingPlan; billing: BillingInterval; onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
   const appliedBilling = plan.group === 'trial' ? 'monthly' : billing;
   return (
-    <article className="grid gap-6 border-b border-border py-7 lg:grid-cols-[1.45fr_0.75fr_0.65fr_0.85fr_0.9fr_auto] lg:items-center">
+    <article className="flex min-h-full flex-col rounded-2xl border border-border bg-background p-6 sm:p-7">
       <PlanPrice plan={plan} billing={appliedBilling} />
-      <PricingFact label="Agents" value={`${plan.agents}`} />
-      <PricingFact label="Term" value={appliedBilling === 'annual' ? '12 months' : `${plan.durationDays} days`} />
-      <PricingFact label="Marketplace" value={plan.marketplace ? 'Publish' : 'Not included'} />
-      <PricingFact label="PAYG credits" value={plan.paygCreditsMinimum ? `$${plan.paygCreditsMinimum} min` : 'No minimum'} />
-      <Button type="button" variant="outline" onClick={() => onSelectPlan(plan.id, appliedBilling)} className="w-full rounded-full bg-transparent lg:w-auto">
+      <dl className="my-7 divide-y divide-border border-y border-border">
+        <PricingFact label="Agents" value={`${plan.agents}`} />
+        <PricingFact label="Term" value={appliedBilling === 'annual' ? '12 months' : `${plan.durationDays} days`} />
+        <PricingFact label="Publish to Marketplace" value={plan.marketplace ? 'Yes' : 'No'} />
+        <PricingFact label="PAYG credits minimum" value={`$${plan.paygCreditsMinimum}`} />
+      </dl>
+      <Button type="button" variant="outline" onClick={() => onSelectPlan(plan.id, appliedBilling)} className="mt-auto w-full rounded-full bg-transparent">
         {plan.group === 'trial' ? 'Start trial' : 'Choose plan'}
         <ArrowRight aria-hidden="true" />
       </Button>
@@ -548,7 +547,13 @@ function PricingRow({ plan, billing, onSelectPlan }: { plan: PricingPlan; billin
 
 function PlanPrice({ plan, billing }: { plan: PricingPlan; billing: BillingInterval }) {
   if (plan.monthlyPrice === 0) {
-    return <div><h4 className="text-xl font-semibold">{plan.name}</h4><p className="mt-1 text-sm text-muted-foreground">Free for {plan.durationDays} days</p></div>;
+    return (
+      <div>
+        <h4 className="text-xl font-semibold">{plan.name}</h4>
+        <p className="mt-5 text-4xl font-semibold tracking-tight">$0</p>
+        <p className="mt-2 text-sm text-muted-foreground">Free for {plan.durationDays} days</p>
+      </div>
+    );
   }
 
   const annualTotal = plan.monthlyPrice * 10;
@@ -556,8 +561,12 @@ function PlanPrice({ plan, billing }: { plan: PricingPlan; billing: BillingInter
   return (
     <div>
       <h4 className="text-xl font-semibold">{plan.name}</h4>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {billing === 'monthly' ? `$${plan.monthlyPrice} / month` : `$${annualTotal} / year · $${formatPrice(monthlyEquivalent)} / month equivalent`}
+      <p className="mt-5 flex items-end gap-2">
+        <span className="text-4xl font-semibold tracking-tight">${billing === 'monthly' ? plan.monthlyPrice : annualTotal}</span>
+        <span className="pb-1 text-sm text-muted-foreground">/ {billing === 'monthly' ? 'month' : 'year'}</span>
+      </p>
+      <p className="mt-2 min-h-5 text-sm text-muted-foreground">
+        {billing === 'annual' ? `$${annualTotal} / year · $${formatPrice(monthlyEquivalent)} / month equivalent` : 'Billed monthly'}
       </p>
     </div>
   );
@@ -565,11 +574,17 @@ function PlanPrice({ plan, billing }: { plan: PricingPlan; billing: BillingInter
 
 function PricingFact({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 lg:block">
-      <span className="text-xs uppercase tracking-wide text-muted-foreground lg:hidden">{label}</span>
-      <span className="text-sm">{value}</span>
+    <div className="flex items-center justify-between gap-4 py-3.5">
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="text-right text-sm font-medium">{value}</dd>
     </div>
   );
+}
+
+function getPricingGridClass(planCount: number) {
+  if (planCount === 1) return 'max-w-sm';
+  if (planCount === 3) return 'md:grid-cols-3';
+  return 'sm:grid-cols-2 xl:grid-cols-4';
 }
 
 function formatPrice(price: number) {
