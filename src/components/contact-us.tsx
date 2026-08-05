@@ -1,284 +1,144 @@
-import { useState, useEffect, useCallback } from 'react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/shadcn/components/ui/button';
 import { Input } from '@/shadcn/components/ui/input';
 import { Label } from '@/shadcn/components/ui/label';
 import { Textarea } from '@/shadcn/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shadcn/components/ui/select';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/shadcn/components/ui/dropdown-menu';
-import { ChevronDown } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/shadcn/components/ui/card';
+import { type BillingInterval, pricingPlans } from '../data/pricing';
 
-interface ContactFormData {
-  fullName: string;
-  company: string;
-  phoneNumber: string;
-  email: string;
-  message: string;
-  heardAboutUs: string;
-  who: string;
-}
+const selectClassName =
+  'h-12 w-full appearance-none rounded-xl border border-input bg-muted px-4 text-sm text-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50';
 
-export function ContactUs() {
-  const [workflows, setWorkflows] = useState<Record<string, boolean>>({
-    'Customer Support': false,
-    'HR and Personnel': false,
-    'Marketing': false,
-    'Engineering Solutions': false,
-    'Software Development': false,
-    'Personal Workflows': false,
-  });
-
-  const handleWorkflowChange = (workflow: string, checked: boolean) => {
-    setWorkflows((prev) => ({ ...prev, [workflow]: checked }));
-  };
-
-  // Controlled state for dropdowns
-  const [workflowsOpen, setWorkflowsOpen] = useState(false);
-  const [whoOpen, setWhoOpen] = useState(false);
-  const [heardAboutUsOpen, setHeardAboutUsOpen] = useState(false);
-
-  // Close all dropdowns on scroll (but not if event is inside a dropdown)
-  const closeAllDropdowns = useCallback((e: Event) => {
-    const target = e.target as HTMLElement;
-    // Don't close if the event originated from inside a dropdown/select content
-    if (target?.closest('[data-radix-popper-content-wrapper]') ||
-        target?.closest('[data-radix-select-content]') ||
-        target?.closest('[data-radix-dropdown-menu-content]')) {
-      return;
-    }
-    setWorkflowsOpen(false);
-    setWhoOpen(false);
-    setHeardAboutUsOpen(false);
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('scroll', closeAllDropdowns, true);
-    window.addEventListener('wheel', closeAllDropdowns, true);
-    window.addEventListener('touchmove', closeAllDropdowns, true);
-    return () => {
-      window.removeEventListener('scroll', closeAllDropdowns, true);
-      window.removeEventListener('wheel', closeAllDropdowns, true);
-      window.removeEventListener('touchmove', closeAllDropdowns, true);
-    };
-  }, [closeAllDropdowns]);
-
-  const [formData, setFormData] = useState<ContactFormData>({
-    fullName: '',
-    company: '',
-    phoneNumber: '',
-    email: '',
-    message: '',
-    heardAboutUs: '',
-    who: '',
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSelectChange = (name: keyof ContactFormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+export function ContactUs({ defaultPlan, defaultBilling }: { defaultPlan: string; defaultBilling: BillingInterval }) {
+  const accessKey = import.meta.env.VITE_PUBLIC_WEB3FORMS_ACCESS_KEY;
 
   return (
-    <Card className='w-full max-w-lg mx-auto bg-white/[0.03] border-white/[0.08] text-white'>
-      <CardHeader>
-        <CardTitle className='text-2xl'>Contact Us</CardTitle>
-        <CardDescription>
-          Fill out the form below and we'll get back to you shortly.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className='text-left'>
-        <form
-          action={'https://api.web3forms.com/submit'}
-          method='POST'
-          className='space-y-4'
+    <div className="rounded-2xl border border-border bg-card p-5 sm:p-8">
+      <div className="mb-7">
+        <h3 className="text-2xl font-semibold tracking-tight">Request beta access</h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          A few details to start. We will follow up with the right technical context.
+        </p>
+      </div>
+
+      <form action="https://api.web3forms.com/submit" method="POST" className="space-y-5">
+        <input type="hidden" name="access_key" value={accessKey} />
+        <input type="hidden" name="subject" value="Agentinc private beta request" />
+        <input type="hidden" name="from_name" value="Agentinc landing page" />
+
+        <BetaRequestFields defaultPlan={defaultPlan} defaultBilling={defaultBilling} />
+
+        <Button
+          type="submit"
+          disabled={!accessKey}
+          className="h-12 w-full rounded-full text-base"
         >
-          <input
-            type='hidden'
-            name='access_key'
-            value={import.meta.env.VITE_PUBLIC_WEB3FORMS_ACCESS_KEY}
-          />
-          <div className='space-y-2'>
-            <Label htmlFor='fullName' className="text-base font-normal">Full Name</Label>
-            <Input
-              id='fullName'
-              name='fullName'
-              placeholder='John Doe'
-              value={formData.fullName}
-              onChange={handleInputChange}
-              required
-              className="h-12 bg-muted/50 rounded-2xl"
-            />
-          </div>
+          Request access
+          <ArrowRight aria-hidden="true" />
+        </Button>
 
-          <div className='space-y-2'>
-            <Label htmlFor='company' className="text-base font-normal">Company</Label>
-            <Input
-              id='company'
-              name='company'
-              placeholder='Acme Inc.'
-              value={formData.company}
-              onChange={handleInputChange}
-              required
-              className="h-12 bg-muted/50 rounded-2xl"
-            />
-          </div>
+        <p className="text-center text-xs leading-relaxed text-muted-foreground">
+          No sales sequence. Just a technical conversation about your agent.
+        </p>
+      </form>
+    </div>
+  );
+}
 
-          <div className='space-y-2'>
-            <Label htmlFor='phoneNumber' className="text-base font-normal">Phone Number</Label>
-            <Input
-              id='phoneNumber'
-              name='phoneNumber'
-              type='tel'
-              placeholder='+1 (555) 123-4567'
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              required
-              className="h-12 bg-muted/50 rounded-2xl"
-            />
-          </div>
+function BetaRequestFields({ defaultPlan, defaultBilling }: { defaultPlan: string; defaultBilling: BillingInterval }) {
+  return (
+    <>
+      <div className="space-y-2">
+        <Label htmlFor="email">Work email</Label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          placeholder="you@company.com"
+          required
+          className="h-12 rounded-xl bg-muted px-4"
+        />
+      </div>
 
-          <div className='space-y-2'>
-            <Label htmlFor='email' className="text-base font-normal">Email</Label>
-            <Input
-              id='email'
-              name='email'
-              type='email'
-              placeholder='john@example.com'
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-              className="h-12 bg-muted/50 rounded-2xl"/>
-          </div>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <RoleSelect />
+        <FrameworkSelect />
+      </div>
 
-          <div className='space-y-2'>
-            <Label htmlFor='who' className="text-base font-normal">Who are you</Label>
-            <Select
-              value={formData.who}
-              onValueChange={(value) =>
-                handleSelectChange('who', value)
-              }
-              required
-              open={whoOpen}
-              onOpenChange={setWhoOpen}
-            >
-              <SelectTrigger id='who' className='w-full !h-12 bg-muted/50 rounded-2xl'>
-                <SelectValue placeholder='I am a..' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='founder'>Founder</SelectItem>
-                <SelectItem value='entrepreneur'>Entrepreneur</SelectItem>
-                <SelectItem value='software engineer'>Software Engineer</SelectItem>
-                <SelectItem value='product manager'>Product Manager</SelectItem>
-                <SelectItem value='marketing'>Marketing</SelectItem>
-                <SelectItem value='business developer'>Business Developer</SelectItem>
-                <SelectItem value='other'>Other</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <PlanSelect defaultPlan={defaultPlan} />
+        <BillingSelect defaultBilling={defaultBilling} />
+      </div>
 
-          <div className='space-y-2'>
-            <Label htmlFor='workflows' className="text-base font-normal">I will use Agentinc for</Label>
-            <DropdownMenu modal={false} open={workflowsOpen} onOpenChange={setWorkflowsOpen}>
-              <DropdownMenuTrigger asChild>
-                <Button variant='outline' className='w-full justify-between font-normal hover:bg-transparent hover:text-inherit'>
-                  {Object.values(workflows).some(Boolean)
-                    ? Object.entries(workflows)
-                        .filter(([, v]) => v)
-                        .map(([k]) => k)
-                        .join(', ')
-                    : 'Select workflows'}
-                  <ChevronDown className='h-4 w-4 opacity-50' />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className='w-[var(--radix-dropdown-menu-trigger-width)]'>
-                <DropdownMenuLabel>Workflows</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {Object.keys(workflows).map((workflow) => (
-                  <DropdownMenuCheckboxItem
-                    key={workflow}
-                    onSelect={(e) => e.preventDefault()}
-                    checked={workflows[workflow]}
-                    onCheckedChange={(checked) => handleWorkflowChange(workflow, checked)}
-                  >
-                    {workflow}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            {Object.entries(workflows)
-              .filter(([, v]) => v)
-              .map(([k]) => (
-                <input key={k} type='hidden' name='workflows' value={k} />
-              ))}
-          </div>
+      <div className="space-y-2">
+        <Label htmlFor="useCase">What do you want to run?</Label>
+        <Textarea
+          id="useCase"
+          name="use_case"
+          placeholder="A short description of your agent or deployment use case"
+          required
+          className="min-h-28 resize-none rounded-xl bg-muted px-4 py-3"
+        />
+      </div>
+    </>
+  );
+}
 
-          <div className='space-y-2'>
-            <Label htmlFor='message' className="text-base font-normal">Message</Label>
-            <Textarea
-              id='message'
-              name='message'
-              placeholder='Tell us more about your company, what job roles would you like to hire?'
-              value={formData.message}
-              onChange={handleInputChange}
-              required
-              className="min-h-[120px] bg-muted/50 rounded-2xl resize-none"
-            />
-          </div>
+function RoleSelect() {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor="role">Your role</Label>
+      <select id="role" name="role" required defaultValue="" className={selectClassName}>
+        <option value="" disabled>Choose a role</option>
+        <option value="developer">Developer</option>
+        <option value="engineering-leader">Engineering leader</option>
+        <option value="founder">Founder</option>
+        <option value="platform-team">Platform team</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+  );
+}
 
-          <div className='space-y-2'>
-            <Label htmlFor='heardAboutUs' className="text-base font-normal">
-              How did you hear about us?{' '}
-              <span className='text-muted-foreground text-sm'>(optional)</span>
-            </Label>
-            <Select
-              value={formData.heardAboutUs}
-              onValueChange={(value) =>
-                handleSelectChange('heardAboutUs', value)
-              }
-              open={heardAboutUsOpen}
-              onOpenChange={setHeardAboutUsOpen}
-            >
-              <SelectTrigger id='heardAboutUs' className='w-full !h-12 bg-muted/50 rounded-2xl'>
-                <SelectValue placeholder='Select an option' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='search'>Search Engine</SelectItem>
-                <SelectItem value='social'>Social Media</SelectItem>
-                <SelectItem value='referral'>Friend or Colleague</SelectItem>
-                <SelectItem value='blog'>Blog or Article</SelectItem>
-                <SelectItem value='event'>Event or Conference</SelectItem>
-                <SelectItem value='other'>Other</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+function FrameworkSelect() {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor="framework">Current framework</Label>
+      <select id="framework" name="framework" required defaultValue="" className={selectClassName}>
+        <option value="" disabled>Choose one</option>
+        <option value="openai">OpenAI</option>
+        <option value="anthropic">Anthropic</option>
+        <option value="langchain">LangChain or LangGraph</option>
+        <option value="crewai">CrewAI</option>
+        <option value="custom">Custom Python</option>
+        <option value="evaluating">Still evaluating</option>
+      </select>
+    </div>
+  );
+}
 
-          <Button type='submit' className='w-full bg-emerald hover:bg-emerald-dark text-black font-semibold rounded-md h-11 transition-colors duration-200'>
-            Submit
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+function PlanSelect({ defaultPlan }: { defaultPlan: string }) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor="plan">Plan interest</Label>
+      <select id="plan" name="plan" required defaultValue={defaultPlan} className={selectClassName}>
+        <option value="" disabled>Choose a plan</option>
+        {pricingPlans.map((plan) => (
+          <option key={plan.id} value={plan.id}>{plan.name}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+function BillingSelect({ defaultBilling }: { defaultBilling: BillingInterval }) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor="billing">Billing preference</Label>
+      <select id="billing" name="billing" required defaultValue={defaultBilling} className={selectClassName}>
+        <option value="monthly">Monthly</option>
+        <option value="annual">Annual, 2 months free</option>
+      </select>
+    </div>
   );
 }

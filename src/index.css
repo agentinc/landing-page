@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -29,57 +29,88 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-emerald: #059669;
-  --color-emerald-light: #10B981;
-  --color-emerald-dark: #047857;
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  --font-mono: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-:root {
-  --background: #050a08;
-  --foreground: #f0fdf4;
-  --card: rgba(255, 255, 255, 0.03);
-  --card-foreground: #f0fdf4;
-  --popover: #0a1510;
-  --popover-foreground: #f0fdf4;
-  --primary: #10B981;
-  --primary-foreground: #022c22;
-  --secondary: #0d1f17;
-  --secondary-foreground: #d1fae5;
-  --muted: #111111;
-  --muted-foreground: #a1a1aa;
-  --accent: #10B981;
-  --accent-foreground: #022c22;
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: rgba(255, 255, 255, 0.1);
-  --input: rgba(255, 255, 255, 0.1);
-  --ring: rgba(255, 255, 255, 0.2);
-  --chart-1: #10B981;
-  --chart-2: #34D399;
-  --chart-3: #059669;
-  --chart-4: #047857;
-  --chart-5: #6ee7b7;
+:root,
+.dark {
+  --background: oklch(0.145 0.01 165);
+  --foreground: oklch(0.965 0.006 165);
+  --card: oklch(0.175 0.011 165);
+  --card-foreground: oklch(0.965 0.006 165);
+  --popover: oklch(0.19 0.012 165);
+  --popover-foreground: oklch(0.965 0.006 165);
+  --primary: oklch(0.965 0.006 165);
+  --primary-foreground: oklch(0.18 0.01 165);
+  --secondary: oklch(0.235 0.012 165);
+  --secondary-foreground: oklch(0.94 0.008 165);
+  --muted: oklch(0.205 0.012 165);
+  --muted-foreground: oklch(0.72 0.012 165);
+  --accent: oklch(0.235 0.012 165);
+  --accent-foreground: oklch(0.965 0.006 165);
+  --destructive: oklch(0.55 0.19 25.5);
+  --border: oklch(0.285 0.014 165);
+  --input: oklch(0.31 0.014 165);
+  --ring: oklch(0.62 0.02 165);
   --radius: 0.625rem;
+  color-scheme: dark;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   html {
-    overflow-y: scroll;
+    scroll-behavior: smooth;
+    overflow-x: clip;
   }
+
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    @apply m-0 bg-background text-foreground antialiased;
+    min-width: 320px;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  button {
+
+  button,
+  select {
     @apply cursor-pointer;
+  }
+
+  ::selection {
+    @apply bg-foreground text-background;
+  }
+}
+
+.landing-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--border) 34%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--border) 34%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
+  opacity: 0.35;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--foreground);
+  box-shadow: 0 0 0 1000px var(--muted) inset;
+  transition: background-color 9999s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

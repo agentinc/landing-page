@@ -1,466 +1,340 @@
 import { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
+import {
+  ArrowRight,
+  Braces,
+  Check,
+  ChevronRight,
+  Cloud,
+  Link2,
+  Menu,
+  Settings2,
+  UsersRound,
+  X,
+} from 'lucide-react';
 import { Button } from '@/shadcn/components/ui/button';
-import { Bot, Building2, Zap, ArrowRight, ArrowUpRight, Check } from 'lucide-react';
 import { ContactUs } from '../components/contact-us';
+import {
+  type BillingInterval,
+  type PricingPlan,
+  builderPlans,
+  enterprisePlans,
+  trialPlan,
+} from '../data/pricing';
 import Logo from '../components/logo';
-import { DotGrid } from '../components/dot-grid';
 
 export const Route = createFileRoute('/')({
   component: LandingPage,
 });
 
+const navigation = [
+  { label: 'How it works', target: 'how-it-works' },
+  { label: 'Platform', target: 'platform' },
+  { label: 'Pricing', target: 'pricing' },
+  { label: 'Marketplace', target: 'marketplace' },
+];
+
+const frameworks = ['OpenAI', 'Anthropic', 'LangChain', 'CrewAI', 'Custom Python'];
+
+const steps = [
+  {
+    number: '01',
+    title: 'Connect the agent you already built',
+    description:
+      'Keep the framework and model provider you chose. Agentinc guides you through bringing the agent into your cloud workspace.',
+  },
+  {
+    number: '02',
+    title: 'Configure it for your team',
+    description:
+      'Choose its tools, access, and responsibilities from one managed platform, without rebuilding the agent around another SDK.',
+  },
+  {
+    number: '03',
+    title: 'Deploy and manage it in the cloud',
+    description:
+      'Launch through Agentinc, monitor activity, and scale access as more people and workflows join your workspace.',
+  },
+];
+
+const platformCapabilities = [
+  {
+    label: 'Framework flexibility',
+    description: 'Bring agents built with the frameworks and model providers your team already uses.',
+    icon: Braces,
+  },
+  {
+    label: 'Managed deployment',
+    description: 'Move from setup to a cloud deployment without managing infrastructure yourself.',
+    icon: Cloud,
+  },
+  {
+    label: 'Connected workflows',
+    description: 'Give agents access to the services and workflows they need from one place.',
+    icon: Link2,
+  },
+  {
+    label: 'Team workspace',
+    description: 'Organize access, activity, and collaboration as your use of agents grows.',
+    icon: UsersRound,
+  },
+];
+
 function LandingPage() {
-  const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState('');
+  const [selectedBilling, setSelectedBilling] = useState<BillingInterval>('monthly');
+
+  const scrollTo = (target: string) => {
+    document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' });
+    setMobileMenuOpen(false);
   };
 
-  const scrollToFeatures = () => {
-    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+  const selectPlan = (planId: string, billing: BillingInterval) => {
+    setSelectedPlan(planId);
+    setSelectedBilling(billing);
+    scrollTo('beta');
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Navbar */}
-      <header className="fixed top-0 left-0 right-0 z-40">
-        <div className="mx-4 mt-4 rounded-lg border border-white/[0.06] bg-[#050a08]/70 backdrop-blur-xl">
-          <div className="px-6 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <Logo width={24} />
-              <span className="text-lg font-semibold tracking-tight text-white">
-                agentinc
-              </span>
-            </div>
-            <nav className="hidden md:flex items-center gap-8">
+    <div className="min-h-screen overflow-x-clip bg-background text-foreground">
+      <Header
+        mobileMenuOpen={mobileMenuOpen}
+        onMenuToggle={() => setMobileMenuOpen((open) => !open)}
+        onNavigate={scrollTo}
+      />
+
+      <main>
+        <Hero onJoinBeta={() => scrollTo('beta')} onLearnMore={() => scrollTo('how-it-works')} />
+        <CompatibilityStrip />
+        <HowItWorks />
+        <ManagedPlatformPreview onJoinBeta={() => scrollTo('beta')} />
+        <PlatformSection />
+        <PricingSection onSelectPlan={selectPlan} />
+        <MarketplaceSection />
+        <BetaSection selectedPlan={selectedPlan} selectedBilling={selectedBilling} />
+      </main>
+
+      <Footer onNavigate={scrollTo} />
+    </div>
+  );
+}
+
+function Header({
+  mobileMenuOpen,
+  onMenuToggle,
+  onNavigate,
+}: {
+  mobileMenuOpen: boolean;
+  onMenuToggle: () => void;
+  onNavigate: (target: string) => void;
+}) {
+  return (
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-5">
+      <div className="mx-auto max-w-7xl rounded-full border border-border bg-background/95 px-4 py-2.5 shadow-sm sm:px-5">
+        <div className="flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => onNavigate('top')}
+            className="flex shrink-0 items-center gap-2.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Go to the top of the page"
+          >
+            <Logo width={23} />
+            <span className="text-base font-semibold tracking-tight sm:text-lg">agentinc</span>
+          </button>
+
+          <nav className="hidden items-center gap-7 md:flex" aria-label="Primary navigation">
+            {navigation.map((item) => (
               <button
-                onClick={scrollToFeatures}
-                className="text-sm text-white/50 hover:text-white transition-colors duration-200"
+                key={item.target}
+                type="button"
+                onClick={() => onNavigate(item.target)}
+                className="rounded-full text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                Features
+                {item.label}
               </button>
-              <button
-                onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm text-white/50 hover:text-white transition-colors duration-200"
-              >
-                Pricing
-              </button>
-              <button
-                onClick={scrollToContact}
-                className="text-sm text-white/50 hover:text-white transition-colors duration-200"
-              >
-                Contact
-              </button>
-            </nav>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2">
+            {/* TODO(ui-phase): swap teal for accent utility */}
             <Button
-              onClick={scrollToContact}
-              className="bg-emerald hover:bg-emerald-dark text-black font-medium px-5 h-9 text-sm rounded-md transition-colors duration-200"
+              type="button"
+              onClick={() => onNavigate('beta')}
+              className="hidden h-10 rounded-full px-5 active:text-teal-600 dark:active:text-teal-400 sm:inline-flex"
             >
-              Get Started
-              <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              Join the beta
+              <ArrowRight aria-hidden="true" />
             </Button>
+            <button
+              type="button"
+              onClick={onMenuToggle}
+              className="inline-flex size-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
+              aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'}
+            >
+              {mobileMenuOpen ? <X aria-hidden="true" className="size-4" /> : <Menu aria-hidden="true" className="size-4" />}
+            </button>
           </div>
         </div>
-      </header>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden flex items-center justify-center px-6 min-h-svh landscape:min-h-svh">
-        <div className="absolute inset-0 pointer-events-auto">
-          <DotGrid />
-        </div>
+        {mobileMenuOpen && (
+          <nav id="mobile-navigation" className="grid gap-1 border-t border-border pt-3 mt-3 md:hidden" aria-label="Mobile navigation">
+            {navigation.map((item) => (
+              <button
+                key={item.target}
+                type="button"
+                onClick={() => onNavigate(item.target)}
+                className="rounded-lg px-3 py-2.5 text-left text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              >
+                {item.label}
+              </button>
+            ))}
+            <Button type="button" onClick={() => onNavigate('beta')} className="mt-2 rounded-full sm:hidden">
+              Join the beta
+              <ArrowRight aria-hidden="true" />
+            </Button>
+          </nav>
+        )}
+      </div>
+    </header>
+  );
+}
 
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-emerald/[0.06] rounded-full blur-[160px]" />
-        </div>
-
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded border border-white/10 bg-white/[0.03] mb-8">
-            <div className="h-1.5 w-1.5 rounded-full bg-emerald animate-pulse" />
-            <span className="text-xs font-medium text-white/60 tracking-wide uppercase">
-              Now in Early Access
-            </span>
+function Hero({ onJoinBeta, onLearnMore }: { onJoinBeta: () => void; onLearnMore: () => void }) {
+  return (
+    <section id="top" className="relative px-5 pb-20 pt-36 sm:px-8 sm:pb-28 sm:pt-44 lg:min-h-[900px] lg:py-40">
+      <div className="pointer-events-none absolute inset-0 landing-grid" />
+      <div className="relative mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[1.04fr_0.96fr] lg:gap-20">
+        <div className="max-w-4xl">
+          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-amber-900/70 bg-amber-950/30 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-amber-300">
+            <span className="size-1.5 rounded-full bg-amber-400" aria-hidden="true" />
+            Private beta
           </div>
-
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6 text-white">
-            Build Your Digital
-            <br />
-            Workspace with{' '}
-            <span className="text-emerald">AI Agents</span>
+          <h1 className="max-w-5xl text-[clamp(2.9rem,7.2vw,6.7rem)] font-bold leading-[0.94] tracking-[-0.065em]">
+            Run any AI agent.
+            <span className="block text-muted-foreground">Rewrite nothing.</span>
           </h1>
-
-          <p className="text-lg sm:text-xl text-white/40 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Create, deploy, and scale your own AI-powered business.
-            Let intelligent agents handle operations while you focus on growth.
+          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+            Bring agents built with OpenAI, Anthropic, LangChain, CrewAI, or your own Python. Agentinc gives your team one managed cloud platform to deploy, manage, and scale them.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            {/* TODO(ui-phase): swap teal for accent utility */}
             <Button
               size="lg"
-              onClick={scrollToContact}
-              className="bg-emerald hover:bg-emerald-dark text-black font-semibold px-8 h-12 text-base rounded-md transition-colors duration-200"
+              type="button"
+              onClick={onJoinBeta}
+              className="h-12 rounded-full px-7 text-base active:text-teal-600 dark:active:text-teal-400"
             >
-              Start Building
-              <ArrowRight className="ml-2 h-4 w-4" />
+              Join the private beta
+              <ArrowRight aria-hidden="true" />
             </Button>
             <Button
               size="lg"
               variant="outline"
-              onClick={scrollToFeatures}
-              className="border-white/10 bg-transparent text-white/70 hover:bg-white/[0.04] hover:text-white hover:border-white/20 font-medium px-8 h-12 text-base rounded-md transition-all duration-200"
+              type="button"
+              onClick={onLearnMore}
+              className="h-12 rounded-full bg-transparent px-7 text-base"
             >
-              Learn More
+              See how it works
             </Button>
           </div>
-
-          {/* Stats row */}
-          <div className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto">
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">24/7</div>
-              <div className="text-xs text-white/30 mt-1">Always On</div>
-            </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-emerald flex items-center justify-center">
-                92%
-                <ArrowUpRight className="h-5 w-5 ml-0.5" />
-              </div>
-              <div className="text-xs text-white/30 mt-1">Efficiency Gain</div>
-            </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">&lt;1m</div>
-              <div className="text-xs text-white/30 mt-1">Deploy Time</div>
-            </div>
-          </div>
         </div>
 
-        {/* Scroll indicator */}
-        <button
-          onClick={scrollToFeatures}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/20 hover:text-white/40 transition-colors duration-200"
-        >
-          <span className="text-xs tracking-widest uppercase">Scroll</span>
-          <div className="w-px h-8 bg-gradient-to-b from-white/20 to-transparent" />
-        </button>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="relative py-32 px-6">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-        </div>
-
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-sm font-medium text-emerald tracking-wide uppercase">
-              Why agentinc
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-3 tracking-tight text-white">
-              Everything you need to build
-              <br />
-              <span className="text-white/40">your AI-powered business</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            <FeatureCard
-              icon={<Bot className="h-6 w-6" />}
-              title="AI-Powered Workforce"
-              description="Deploy specialized AI agents that work 24/7. Your digital team never sleeps, never takes breaks."
-            />
-            <FeatureCard
-              icon={<Building2 className="h-6 w-6" />}
-              title="Multi-tenant Support"
-              description="Easily onboard teams with granular permissions. Control employee access to specific workflows."
-            />
-            <FeatureCard
-              icon={<Zap className="h-6 w-6" />}
-              title="Scale Instantly"
-              description="Add new agents and capabilities in minutes. Grow operations without traditional overhead."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <PricingSection />
-
-      {/* CTA / Contact Section */}
-      <section id="contact" className="relative py-32 px-6">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-emerald/[0.04] rounded-full blur-[150px]" />
-        </div>
-
-        <div className="relative z-10 max-w-2xl mx-auto text-center">
-          <span className="text-sm font-medium text-emerald tracking-wide uppercase">
-            Get Started
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-bold mt-3 mb-4 tracking-tight text-white">
-            Ready to launch?
-          </h2>
-          <p className="text-white/40 mb-10">
-            Join entrepreneurs building the future of business with AI.
-          </p>
-          <ContactUs />
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-white/[0.06] py-8 px-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-between text-sm text-white/30">
-          <div className="flex items-center gap-2">
-            <Logo width={20} />
-            <span className="font-medium text-white/50">agentinc</span>
-          </div>
-          <p>&copy; 2026 agentinc. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+        <CloudPlatformMap />
+      </div>
+    </section>
   );
 }
 
-function FeatureCard({
+function CloudPlatformMap() {
+  return (
+    <figure className="relative mx-auto w-full max-w-xl" aria-label="Agentinc cloud deployment flow">
+      <div className="absolute -inset-12 -z-10 rounded-full bg-muted/40 blur-3xl" />
+      <div className="overflow-hidden rounded-2xl border border-border bg-card">
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="size-2 rounded-full bg-muted-foreground/40" />
+            <span className="size-2 rounded-full bg-muted-foreground/25" />
+            <span className="size-2 rounded-full bg-muted-foreground/15" />
+          </div>
+          <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">cloud.workspace</span>
+        </div>
+        <div className="space-y-3 p-4 sm:p-6">
+          <PlatformNode label="Your agent" detail="built with your preferred framework" icon={<Braces aria-hidden="true" />} />
+          <FlowConnector label="connect" />
+          <PlatformNode label="Agentinc setup" detail="guided configuration for your team" icon={<Settings2 aria-hidden="true" />} />
+          <FlowConnector label="deploy" />
+          <ManagedCloudNode />
+        </div>
+        <div className="grid grid-cols-3 border-t border-border text-center text-[10px] uppercase tracking-wide text-muted-foreground">
+          {['Deploy', 'Monitor', 'Scale'].map((action) => (
+            <div key={action} className="border-r border-border px-2 py-3 last:border-r-0">
+              {action}
+            </div>
+          ))}
+        </div>
+      </div>
+    </figure>
+  );
+}
+
+function PlatformNode({
+  label,
+  detail,
   icon,
-  title,
-  description,
 }: {
+  label: string;
+  detail: string;
   icon: React.ReactNode;
-  title: string;
-  description: string;
 }) {
   return (
-    <div className="rounded-lg p-8 transition-all duration-300 group cursor-pointer border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10">
-      <div className="inline-flex items-center justify-center h-12 w-12 rounded-md bg-white/[0.05] text-white/70 mb-5 group-hover:text-emerald transition-colors duration-300">
+    <div className="flex items-center gap-4 rounded-xl border border-border bg-background p-4">
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground [&_svg]:size-4">
         {icon}
       </div>
-      <h3 className="text-lg font-semibold mb-2 text-white">{title}</h3>
-      <p className="text-sm text-white/40 leading-relaxed">{description}</p>
+      <div className="min-w-0">
+        <div className="text-sm font-medium">{label}</div>
+        <div className="mt-0.5 truncate font-mono text-xs text-muted-foreground">{detail}</div>
+      </div>
     </div>
   );
 }
 
-// --- Pricing Data ---
-
-type Tier = 'regular' | 'developer' | 'enterprise';
-
-interface Plan {
-  name: string;
-  price: { monthly: number; yearly: number };
-  description: string;
-  features: string[];
-  highlighted?: boolean;
+function ManagedCloudNode() {
+  return (
+    <div className="flex items-center gap-4 rounded-xl border border-foreground/30 bg-foreground p-4 text-background">
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-background/20 [&_svg]:size-4">
+        <Cloud aria-hidden="true" />
+      </div>
+      <div className="min-w-0">
+        <div className="text-sm font-medium">Agentinc cloud</div>
+        <div className="mt-0.5 truncate font-mono text-xs text-background/65">managed · observable · scalable</div>
+      </div>
+    </div>
+  );
 }
 
-const pricingData: Record<Tier, Plan[]> = {
-  regular: [
-    {
-      name: 'Starter',
-      price: { monthly: 0, yearly: 0 },
-      description: 'For individuals exploring AI agents',
-      features: [
-        '1 AI agent',
-        '100 tasks / month',
-        'Community support',
-        'Basic analytics',
-      ],
-    },
-    {
-      name: 'Pro',
-      price: { monthly: 29, yearly: 290 },
-      description: 'For professionals scaling their workflows',
-      features: [
-        '5 AI agents',
-        '2,000 tasks / month',
-        'Email support',
-        'Advanced analytics',
-        'Custom workflows',
-      ],
-      highlighted: true,
-    },
-    {
-      name: 'Business',
-      price: { monthly: 79, yearly: 790 },
-      description: 'For teams that need more power',
-      features: [
-        '20 AI agents',
-        '10,000 tasks / month',
-        'Priority support',
-        'Team collaboration',
-        'API access',
-        'Audit logs',
-      ],
-    },
-  ],
-  developer: [
-    {
-      name: 'Indie',
-      price: { monthly: 19, yearly: 190 },
-      description: 'For solo developers building agents',
-      features: [
-        '3 custom agents',
-        '1,000 API calls / month',
-        'SDK access',
-        'Dev sandbox',
-        'Community forum',
-      ],
-    },
-    {
-      name: 'Team',
-      price: { monthly: 49, yearly: 490 },
-      description: 'For dev teams shipping AI products',
-      features: [
-        '15 custom agents',
-        '10,000 API calls / month',
-        'SDK + CLI access',
-        'Staging environments',
-        'Webhook integrations',
-        'Priority support',
-      ],
-      highlighted: true,
-    },
-    {
-      name: 'Scale',
-      price: { monthly: 149, yearly: 1490 },
-      description: 'For high-volume agent deployments',
-      features: [
-        'Unlimited agents',
-        '100,000 API calls / month',
-        'Multi-region deploy',
-        'Custom model routing',
-        'Dedicated support',
-        'SLA guarantee',
-      ],
-    },
-  ],
-  enterprise: [
-    {
-      name: 'Essentials',
-      price: { monthly: 199, yearly: 1990 },
-      description: 'Enterprise-grade foundation',
-      features: [
-        '50 AI agents',
-        '50,000 tasks / month',
-        'SSO / SAML',
-        'Role-based access',
-        'Dedicated account manager',
-        'Uptime SLA',
-      ],
-    },
-    {
-      name: 'Advanced',
-      price: { monthly: 499, yearly: 4990 },
-      description: 'Full platform with compliance',
-      features: [
-        'Unlimited agents',
-        'Unlimited tasks',
-        'SOC 2 compliance',
-        'Data residency options',
-        'Custom integrations',
-        'On-call support',
-        'Private model hosting',
-      ],
-      highlighted: true,
-    },
-    {
-      name: 'Custom',
-      price: { monthly: -1, yearly: -1 },
-      description: 'Tailored for your organization',
-      features: [
-        'Everything in Advanced',
-        'On-premise deployment',
-        'Custom SLAs',
-        'Dedicated infrastructure',
-        'White-label options',
-        'Executive reviews',
-        'Training & onboarding',
-      ],
-    },
-  ],
-};
-
-const tierLabels: Record<Tier, string> = {
-  regular: 'Regular',
-  developer: 'Developer',
-  enterprise: 'Enterprise',
-};
-
-function PricingSection() {
-  const [billing, setBilling] = useState<'monthly' | 'yearly'>('monthly');
-  const [tier, setTier] = useState<Tier>('regular');
-
-  const plans = pricingData[tier];
-
+function FlowConnector({ label }: { label: string }) {
   return (
-    <section id="pricing" className="relative py-32 px-6">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-      </div>
+    <div className="flex items-center gap-3 px-5 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+      <span className="h-6 w-px bg-border" />
+      {label}
+    </div>
+  );
+}
 
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <span className="text-sm font-medium text-emerald tracking-wide uppercase">
-            Pricing
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-bold mt-3 tracking-tight text-white">
-            Simple, transparent pricing
-          </h2>
-          <p className="text-white/40 mt-3 max-w-md mx-auto">
-            Choose the plan that fits your needs. Scale up anytime.
-          </p>
-        </div>
-
-        {/* Billing toggle */}
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex items-center rounded-lg border border-white/[0.08] bg-white/[0.03] p-1">
-            <button
-              onClick={() => setBilling('monthly')}
-              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                billing === 'monthly'
-                  ? 'bg-white/10 text-white'
-                  : 'text-white/40 hover:text-white/60'
-              }`}
-            >
-              Monthly
-            </button>
-            <button
-              onClick={() => setBilling('yearly')}
-              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                billing === 'yearly'
-                  ? 'bg-white/10 text-white'
-                  : 'text-white/40 hover:text-white/60'
-              }`}
-            >
-              Yearly
-              <span className="ml-1.5 text-xs text-emerald">Save 20%</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Tier segmented control */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex items-center rounded-lg border border-white/[0.08] bg-white/[0.03] p-1">
-            {(Object.keys(tierLabels) as Tier[]).map((t) => (
-              <button
-                key={t}
-                onClick={() => setTier(t)}
-                className={`px-5 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                  tier === t
-                    ? 'bg-emerald text-black'
-                    : 'text-white/40 hover:text-white/60'
-                }`}
-              >
-                {tierLabels[t]}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Plan cards */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {plans.map((plan) => (
-            <PlanCard
-              key={plan.name}
-              plan={plan}
-              billing={billing}
-            />
+function CompatibilityStrip() {
+  return (
+    <section aria-label="Supported agent frameworks" className="border-y border-border px-5 sm:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 py-6 sm:flex-row sm:items-center sm:justify-between">
+        <p className="shrink-0 text-sm text-muted-foreground">Keep your framework</p>
+        <div className="flex flex-wrap gap-x-7 gap-y-3 sm:justify-end">
+          {frameworks.map((framework) => (
+            <span key={framework} className="text-sm font-medium text-foreground/80">
+              {framework}
+            </span>
           ))}
         </div>
       </div>
@@ -468,66 +342,313 @@ function PricingSection() {
   );
 }
 
-function PlanCard({
-  plan,
-  billing,
-}: {
-  plan: Plan;
-  billing: 'monthly' | 'yearly';
-}) {
-  const isCustom = plan.price.monthly === -1;
-  const price = isCustom ? null : plan.price[billing];
+function HowItWorks() {
+  return (
+    <section id="how-it-works" className="px-5 py-24 sm:px-8 sm:py-32">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">How it works</p>
+            <h2 className="mt-4 max-w-md text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+              Your agent works. Moving it should not mean rebuilding it.
+            </h2>
+          </div>
+          <div className="border-t border-border">
+            {steps.map((step) => (
+              <article key={step.number} className="grid gap-4 border-b border-border py-8 sm:grid-cols-[4rem_0.8fr_1.2fr] sm:gap-8 sm:py-10">
+                <span className="font-mono text-xs text-muted-foreground">{step.number}</span>
+                <h3 className="text-xl font-semibold leading-snug">{step.title}</h3>
+                <p className="max-w-xl leading-relaxed text-muted-foreground">{step.description}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ManagedPlatformPreview({ onJoinBeta }: { onJoinBeta: () => void }) {
+  return (
+    <section id="platform" className="bg-foreground px-5 py-24 text-background sm:px-8 sm:py-32">
+      <div className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
+        <div>
+          <p className="text-sm font-medium text-background/60">Managed platform</p>
+          <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+            From existing agent to managed cloud deployment.
+          </h2>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-background/65">
+            Connect your agent, configure what it can do, and manage it from a shared workspace built for teams.
+          </p>
+          <Button
+            type="button"
+            onClick={onJoinBeta}
+            className="mt-9 h-12 rounded-full border border-background/20 bg-background px-7 text-base text-foreground hover:bg-background/90"
+          >
+            Bring your agent
+            <ArrowRight aria-hidden="true" />
+          </Button>
+        </div>
+
+        <div className="overflow-hidden rounded-2xl border border-background/15 bg-background text-foreground shadow-md">
+          <div className="flex items-center justify-between border-b border-border px-4 py-3">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Cloud aria-hidden="true" className="size-4" />
+              Example workflow
+            </div>
+            <span className="font-mono text-[10px] text-muted-foreground">Agentinc Cloud</span>
+          </div>
+          <div className="space-y-3 p-5 sm:p-8">
+            <DeploymentStatus label="Agent connected" detail="Existing framework" />
+            <DeploymentStatus label="Access configured" detail="Team workspace" />
+            <DeploymentStatus label="Integrations selected" detail="Connected tools" />
+            <ReadyDeploymentStatus />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DeploymentStatus({ label, detail }: { label: string; detail: string }) {
+  return (
+    <div className="flex items-center justify-between gap-5 rounded-xl border border-border bg-card p-4">
+      <div className="flex items-center gap-3">
+        <Check aria-hidden="true" className="size-3.5" />
+        <span className="text-sm font-medium">{label}</span>
+      </div>
+      <span className="text-right text-sm text-muted-foreground">{detail}</span>
+    </div>
+  );
+}
+
+function ReadyDeploymentStatus() {
+  return (
+    <div className="flex items-center justify-between gap-5 rounded-xl border border-foreground/30 bg-foreground p-4 text-background">
+      <div className="flex items-center gap-3">
+        <Check aria-hidden="true" className="size-3.5" />
+        <span className="text-sm font-medium">Deployment</span>
+      </div>
+      <span className="text-right text-sm text-background/65">Ready to deploy</span>
+    </div>
+  );
+}
+
+function PlatformSection() {
+  return (
+    <section className="px-5 py-24 sm:px-8 sm:py-32">
+      <div className="mx-auto max-w-7xl">
+        <div className="max-w-3xl">
+          <p className="text-sm font-medium text-muted-foreground">One cloud platform</p>
+          <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+            Everything your team needs to put agents to work.
+          </h2>
+        </div>
+
+        <div className="mt-16 grid border-y border-border md:grid-cols-2">
+          {platformCapabilities.map(({ label, description, icon: Icon }, index) => (
+            <article
+              key={label}
+              className={`grid grid-cols-[auto_1fr] gap-5 py-8 md:p-10 ${index % 2 === 0 ? 'md:border-r md:border-border' : ''} ${index < 2 ? 'border-b border-border' : ''}`}
+            >
+              <div className="flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground">
+                <Icon aria-hidden="true" className="size-4" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">{label}</h3>
+                <p className="mt-2 max-w-md leading-relaxed text-muted-foreground">{description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PricingSection({ onSelectPlan }: { onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
+  const [billing, setBilling] = useState<BillingInterval>('monthly');
 
   return (
-    <div
-      className={`rounded-lg p-8 flex flex-col border transition-all duration-300 ${
-        plan.highlighted
-          ? 'border-emerald/30 bg-emerald/[0.04]'
-          : 'border-white/[0.06] bg-white/[0.02]'
-      }`}
-    >
-      {plan.highlighted && (
-        <span className="text-xs font-medium text-emerald uppercase tracking-wide mb-4">
-          Most Popular
-        </span>
-      )}
-
-      <h3 className="text-lg font-semibold text-white">{plan.name}</h3>
-      <p className="text-sm text-white/40 mt-1">{plan.description}</p>
-
-      <div className="mt-6 mb-6">
-        {isCustom ? (
-          <span className="text-3xl font-bold text-white">Custom</span>
-        ) : (
-          <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-bold text-white">
-              ${price}
-            </span>
-            <span className="text-sm text-white/30">
-              / {billing === 'monthly' ? 'mo' : 'yr'}
-            </span>
-          </div>
-        )}
+    <section id="pricing" className="border-y border-border bg-card px-5 py-24 sm:px-8 sm:py-32">
+      <div className="mx-auto max-w-7xl">
+        <PricingHeader billing={billing} onBillingChange={setBilling} />
+        <div className="mt-14 space-y-10">
+          <PricingGroup title="Start free" plans={[trialPlan]} billing="monthly" onSelectPlan={onSelectPlan} />
+          <PricingGroup title="Builders and teams" plans={builderPlans} billing={billing} onSelectPlan={onSelectPlan} />
+          <PricingGroup title="Enterprise" plans={enterprisePlans} billing={billing} onSelectPlan={onSelectPlan} />
+        </div>
       </div>
+    </section>
+  );
+}
 
-      <ul className="space-y-3 mb-8 flex-1">
-        {plan.features.map((feature) => (
-          <li key={feature} className="flex items-start gap-2.5 text-sm text-white/50">
-            <Check className="h-4 w-4 text-emerald shrink-0 mt-0.5" />
-            {feature}
-          </li>
-        ))}
-      </ul>
-
-      <Button
-        className={`w-full rounded-md h-10 text-sm font-medium transition-colors duration-200 ${
-          plan.highlighted
-            ? 'bg-emerald hover:bg-emerald-dark text-black'
-            : 'bg-white/[0.06] hover:bg-white/10 text-white border border-white/[0.08]'
-        }`}
-      >
-        {isCustom ? 'Contact Sales' : price === 0 ? 'Get Started Free' : 'Get Started'}
-      </Button>
+function PricingHeader({ billing, onBillingChange }: { billing: BillingInterval; onBillingChange: (billing: BillingInterval) => void }) {
+  return (
+    <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      <div className="max-w-3xl">
+        <p className="text-sm font-medium text-muted-foreground">Pricing</p>
+        <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">Start small. Add agents as your work grows.</h2>
+        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">Every paid plan can be billed annually. Pay for 10 months and use Agentinc for 12.</p>
+      </div>
+      <div className="inline-flex w-fit rounded-full border border-border bg-background p-1" aria-label="Billing interval">
+        <BillingButton label="Monthly" interval="monthly" activeBilling={billing} onBillingChange={onBillingChange} />
+        <BillingButton label="Annual · 2 months free" interval="annual" activeBilling={billing} onBillingChange={onBillingChange} />
+      </div>
     </div>
+  );
+}
+
+function BillingButton({ label, interval, activeBilling, onBillingChange }: { label: string; interval: BillingInterval; activeBilling: BillingInterval; onBillingChange: (billing: BillingInterval) => void }) {
+  const isActive = activeBilling === interval;
+  return (
+    <button
+      type="button"
+      onClick={() => onBillingChange(interval)}
+      aria-pressed={isActive}
+      className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${isActive ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}
+    >
+      {label}
+    </button>
+  );
+}
+
+function PricingGroup({ title, plans, billing, onSelectPlan }: { title: string; plans: PricingPlan[]; billing: BillingInterval; onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
+  return (
+    <div>
+      <div className="flex items-center justify-between border-b border-border pb-4">
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <span className="hidden text-xs uppercase tracking-wide text-muted-foreground lg:block">Agents · term · marketplace · PAYG credits</span>
+      </div>
+      <div>
+        {plans.map((plan) => (
+          <PricingRow key={plan.id} plan={plan} billing={billing} onSelectPlan={onSelectPlan} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PricingRow({ plan, billing, onSelectPlan }: { plan: PricingPlan; billing: BillingInterval; onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
+  const appliedBilling = plan.group === 'trial' ? 'monthly' : billing;
+  return (
+    <article className="grid gap-6 border-b border-border py-7 lg:grid-cols-[1.45fr_0.75fr_0.65fr_0.85fr_0.9fr_auto] lg:items-center">
+      <PlanPrice plan={plan} billing={appliedBilling} />
+      <PricingFact label="Agents" value={`${plan.agents}`} />
+      <PricingFact label="Term" value={appliedBilling === 'annual' ? '12 months' : `${plan.durationDays} days`} />
+      <PricingFact label="Marketplace" value={plan.marketplace ? 'Publish' : 'Not included'} />
+      <PricingFact label="PAYG credits" value={plan.paygCreditsMinimum ? `$${plan.paygCreditsMinimum} min` : 'No minimum'} />
+      <Button type="button" variant="outline" onClick={() => onSelectPlan(plan.id, appliedBilling)} className="w-full rounded-full bg-transparent lg:w-auto">
+        {plan.group === 'trial' ? 'Start trial' : 'Choose plan'}
+        <ArrowRight aria-hidden="true" />
+      </Button>
+    </article>
+  );
+}
+
+function PlanPrice({ plan, billing }: { plan: PricingPlan; billing: BillingInterval }) {
+  if (plan.monthlyPrice === 0) {
+    return <div><h4 className="text-xl font-semibold">{plan.name}</h4><p className="mt-1 text-sm text-muted-foreground">Free for {plan.durationDays} days</p></div>;
+  }
+
+  const annualTotal = plan.monthlyPrice * 10;
+  const monthlyEquivalent = annualTotal / 12;
+  return (
+    <div>
+      <h4 className="text-xl font-semibold">{plan.name}</h4>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {billing === 'monthly' ? `$${plan.monthlyPrice} / month` : `$${annualTotal} / year · $${formatPrice(monthlyEquivalent)} / month equivalent`}
+      </p>
+    </div>
+  );
+}
+
+function PricingFact({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-4 lg:block">
+      <span className="text-xs uppercase tracking-wide text-muted-foreground lg:hidden">{label}</span>
+      <span className="text-sm">{value}</span>
+    </div>
+  );
+}
+
+function formatPrice(price: number) {
+  return Number.isInteger(price) ? price.toString() : price.toFixed(2);
+}
+
+function MarketplaceSection() {
+  return (
+    <section id="marketplace" className="border-y border-border bg-card px-5 py-24 sm:px-8 sm:py-32">
+      <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-end lg:gap-24">
+        <div>
+          <p className="text-sm font-medium text-muted-foreground">Marketplace distribution</p>
+          <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+            Publish once. Install into any tenant.
+          </h2>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            Developers publish without adopting another SDK. Teams discover and install reviewed agents into a managed workspace with clear administrative controls.
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center">
+          {['Publish', 'Review', 'Install'].map((stage, index) => (
+            <div key={stage} className="contents">
+              <div className="rounded-xl border border-border bg-background p-5">
+                <span className="font-mono text-[10px] text-muted-foreground">0{index + 1}</span>
+                <div className="mt-8 text-lg font-semibold">{stage}</div>
+              </div>
+              {index < 2 && <ChevronRight aria-hidden="true" className="mx-auto hidden size-4 text-muted-foreground sm:block" />}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BetaSection({ selectedPlan, selectedBilling }: { selectedPlan: string; selectedBilling: BillingInterval }) {
+  return (
+    <section id="beta" className="relative px-5 py-24 sm:px-8 sm:py-32">
+      <div className="pointer-events-none absolute inset-0 landing-grid opacity-40" />
+      <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
+        <div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-900/70 bg-amber-950/30 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-amber-300">
+            Private beta access
+          </div>
+          <h2 className="mt-7 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+            Bring the agent you already built.
+          </h2>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            Tell us what you are running today. We will help you adapt, deploy, and operate it on Agentinc.
+          </p>
+          <ul className="mt-9 space-y-4 text-sm text-muted-foreground">
+            {['Framework-independent onboarding', 'Managed cloud deployment', 'Direct access to the Agentinc team'].map((benefit) => (
+              <li key={benefit} className="flex items-center gap-3">
+                <span className="flex size-5 items-center justify-center rounded-full border border-border">
+                  <Check aria-hidden="true" className="size-3" />
+                </span>
+                {benefit}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <ContactUs key={`${selectedPlan}-${selectedBilling}`} defaultPlan={selectedPlan} defaultBilling={selectedBilling} />
+      </div>
+    </section>
+  );
+}
+
+function Footer({ onNavigate }: { onNavigate: (target: string) => void }) {
+  return (
+    <footer className="border-t border-border px-5 py-8 sm:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <button type="button" onClick={() => onNavigate('top')} className="flex items-center gap-2 text-foreground">
+          <Logo width={19} />
+          <span className="font-medium">agentinc</span>
+        </button>
+        <p>One cloud platform for agents built anywhere.</p>
+        <p>&copy; 2026 agentinc.</p>
+      </div>
+    </footer>
   );
 }
