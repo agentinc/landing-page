@@ -1,4 +1,5 @@
 export type BillingInterval = 'monthly' | 'annual';
+export type PricingFamily = 'builder' | 'team' | 'enterprise';
 
 export interface PricingPlan {
   id: string;
@@ -8,44 +9,46 @@ export interface PricingPlan {
   durationDays: number;
   marketplace: boolean;
   paygCreditsMinimum: number;
-  group: 'trial' | 'builder' | 'enterprise';
+  family: PricingFamily;
 }
 
 export const pricingPlans: PricingPlan[] = [
   {
     id: 'free-trial', name: 'Free Trial', monthlyPrice: 0, agents: 1,
-    durationDays: 14, marketplace: false, paygCreditsMinimum: 0, group: 'trial',
+    durationDays: 14, marketplace: false, paygCreditsMinimum: 0, family: 'builder',
   },
   {
     id: 'developer', name: 'Developer Plan', monthlyPrice: 5, agents: 0,
-    durationDays: 30, marketplace: true, paygCreditsMinimum: 0, group: 'builder',
+    durationDays: 30, marketplace: true, paygCreditsMinimum: 0, family: 'builder',
   },
   {
     id: 'starter', name: 'Starter Plan', monthlyPrice: 25, agents: 5,
-    durationDays: 30, marketplace: true, paygCreditsMinimum: 25, group: 'builder',
+    durationDays: 30, marketplace: true, paygCreditsMinimum: 25, family: 'team',
   },
   {
     id: 'pro', name: 'Pro Plan', monthlyPrice: 50, agents: 10,
-    durationDays: 30, marketplace: true, paygCreditsMinimum: 50, group: 'builder',
+    durationDays: 30, marketplace: true, paygCreditsMinimum: 50, family: 'team',
   },
   {
     id: 'max', name: 'Max Plan', monthlyPrice: 80, agents: 20,
-    durationDays: 30, marketplace: true, paygCreditsMinimum: 100, group: 'builder',
+    durationDays: 30, marketplace: true, paygCreditsMinimum: 100, family: 'team',
   },
   {
     id: 'enterprise', name: 'Enterprise', monthlyPrice: 200, agents: 50,
-    durationDays: 30, marketplace: true, paygCreditsMinimum: 250, group: 'enterprise',
+    durationDays: 30, marketplace: true, paygCreditsMinimum: 250, family: 'enterprise',
   },
   {
     id: 'enterprise-plus', name: 'Enterprise Plus', monthlyPrice: 300, agents: 100,
-    durationDays: 30, marketplace: true, paygCreditsMinimum: 500, group: 'enterprise',
+    durationDays: 30, marketplace: true, paygCreditsMinimum: 500, family: 'enterprise',
   },
   {
     id: 'enterprise-elite', name: 'Enterprise Elite', monthlyPrice: 500, agents: 200,
-    durationDays: 30, marketplace: true, paygCreditsMinimum: 1000, group: 'enterprise',
+    durationDays: 30, marketplace: true, paygCreditsMinimum: 1000, family: 'enterprise',
   },
 ];
 
-export const trialPlan = pricingPlans[0];
-export const builderPlans = pricingPlans.filter((plan) => plan.group === 'builder');
-export const enterprisePlans = pricingPlans.filter((plan) => plan.group === 'enterprise');
+export const pricingPlansByFamily: Record<PricingFamily, PricingPlan[]> = {
+  builder: pricingPlans.filter((plan) => plan.family === 'builder'),
+  team: pricingPlans.filter((plan) => plan.family === 'team'),
+  enterprise: pricingPlans.filter((plan) => plan.family === 'enterprise'),
+};

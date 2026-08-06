@@ -16,10 +16,9 @@ import { Button } from '@/shadcn/components/ui/button';
 import { ContactUs } from '../components/contact-us';
 import {
   type BillingInterval,
+  type PricingFamily,
   type PricingPlan,
-  builderPlans,
-  enterprisePlans,
-  trialPlan,
+  pricingPlansByFamily,
 } from '../data/pricing';
 import Logo from '../components/logo';
 
@@ -35,6 +34,16 @@ const navigation = [
 ];
 
 const frameworks = ['OpenAI', 'Anthropic', 'LangChain', 'CrewAI', 'Custom Python'];
+
+const pricingFamilyOrder: PricingFamily[] = ['builder', 'team', 'enterprise'];
+const pricingFamilyDetails: Record<PricingFamily, { label: string; description: string }> = {
+  builder: { label: 'Builder', description: 'Explore, build, and publish your first agents.' },
+  team: { label: 'Team', description: 'Run more agents across growing workflows.' },
+  enterprise: { label: 'Enterprise', description: 'Scale agent capacity across your organization.' },
+};
+// TODO(ui-phase): swap teal for accent utility
+const activeSwitchButtonClass = 'bg-teal-400 text-primary-foreground hover:bg-teal-300';
+const inactiveSwitchButtonClass = 'text-muted-foreground hover:bg-accent hover:text-foreground';
 
 const steps = [
   {
@@ -468,33 +477,80 @@ function PlatformSection() {
 
 function PricingSection({ onSelectPlan }: { onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
   const [billing, setBilling] = useState<BillingInterval>('monthly');
+  const [family, setFamily] = useState<PricingFamily>('team');
 
   return (
     <section id="pricing" className="border-y border-border bg-card px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-7xl">
-        <PricingHeader billing={billing} onBillingChange={setBilling} />
-        <div className="mt-14 space-y-10">
-          <PricingGroup title="Start free" plans={[trialPlan]} billing="monthly" onSelectPlan={onSelectPlan} />
-          <PricingGroup title="Builders and teams" plans={builderPlans} billing={billing} onSelectPlan={onSelectPlan} />
-          <PricingGroup title="Enterprise" plans={enterprisePlans} billing={billing} onSelectPlan={onSelectPlan} />
-        </div>
+        <PricingHeader />
+        <PricingControls family={family} billing={billing} onFamilyChange={setFamily} onBillingChange={setBilling} />
+        <PricingPlansPanel family={family} billing={billing} onSelectPlan={onSelectPlan} />
       </div>
     </section>
   );
 }
 
-function PricingHeader({ billing, onBillingChange }: { billing: BillingInterval; onBillingChange: (billing: BillingInterval) => void }) {
+function PricingControls({ family, billing, onFamilyChange, onBillingChange }: { family: PricingFamily; billing: BillingInterval; onFamilyChange: (family: PricingFamily) => void; onBillingChange: (billing: BillingInterval) => void }) {
   return (
-    <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-      <div className="max-w-3xl">
-        <p className="text-sm font-medium text-muted-foreground">Pricing</p>
-        <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">Start small. Add agents as your work grows.</h2>
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">Every paid plan can be billed annually. Pay for 10 months and use Agentinc for 12.</p>
+    <div className="mt-12 flex flex-col gap-5 border-y border-border py-5 lg:flex-row lg:items-center lg:justify-between">
+      <PricingFamilySwitch activeFamily={family} onFamilyChange={onFamilyChange} />
+      <BillingSwitch billing={billing} onBillingChange={onBillingChange} />
+    </div>
+  );
+}
+
+function PricingPlansPanel({ family, billing, onSelectPlan }: { family: PricingFamily; billing: BillingInterval; onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
+  const familyDetails = pricingFamilyDetails[family];
+  const plans = pricingPlansByFamily[family];
+  return (
+    <div className="mt-10" aria-live="polite">
+      <div className="mb-6">
+        <h3 className="text-2xl font-semibold tracking-tight">{familyDetails.label} plans</h3>
+        <p className="mt-2 text-sm text-muted-foreground">{familyDetails.description}</p>
       </div>
-      <div className="inline-flex w-fit rounded-full border border-border bg-background p-1" aria-label="Billing interval">
-        <BillingButton label="Monthly" interval="monthly" activeBilling={billing} onBillingChange={onBillingChange} />
-        <BillingButton label="Annual · 2 months free" interval="annual" activeBilling={billing} onBillingChange={onBillingChange} />
+      <div className={`grid items-stretch gap-4 ${getPricingGridClass(plans.length)}`}>
+        {plans.map((plan) => <PricingPlanCard key={plan.id} plan={plan} billing={billing} onSelectPlan={onSelectPlan} />)}
       </div>
+    </div>
+  );
+}
+
+function PricingHeader() {
+  return (
+    <div className="max-w-3xl">
+      <p className="text-sm font-medium text-muted-foreground">Pricing</p>
+      <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">Start small. Add agents as your work grows.</h2>
+      <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">Every paid plan can be billed annually. Pay for 10 months and use Agentinc for 12.</p>
+    </div>
+  );
+}
+
+function PricingFamilySwitch({ activeFamily, onFamilyChange }: { activeFamily: PricingFamily; onFamilyChange: (family: PricingFamily) => void }) {
+  return (
+    <div className="inline-flex w-full rounded-full border border-border bg-background p-1 sm:w-fit" role="group" aria-label="Plan family">
+      {pricingFamilyOrder.map((family) => {
+        const isActive = activeFamily === family;
+        return (
+          <button
+            key={family}
+            type="button"
+            aria-pressed={isActive}
+            onClick={() => onFamilyChange(family)}
+            className={`flex-1 rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 sm:flex-none ${isActive ? activeSwitchButtonClass : inactiveSwitchButtonClass}`}
+          >
+            {pricingFamilyDetails[family].label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function BillingSwitch({ billing, onBillingChange }: { billing: BillingInterval; onBillingChange: (billing: BillingInterval) => void }) {
+  return (
+    <div className="inline-flex w-full rounded-full border border-border bg-background p-1 sm:w-fit" aria-label="Billing interval">
+      <BillingButton label="Monthly" interval="monthly" activeBilling={billing} onBillingChange={onBillingChange} />
+      <BillingButton label="Annual · 2 free" interval="annual" activeBilling={billing} onBillingChange={onBillingChange} />
     </div>
   );
 }
@@ -506,28 +562,15 @@ function BillingButton({ label, interval, activeBilling, onBillingChange }: { la
       type="button"
       onClick={() => onBillingChange(interval)}
       aria-pressed={isActive}
-      className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${isActive ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}
+      className={`flex-1 rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 sm:flex-none ${isActive ? activeSwitchButtonClass : inactiveSwitchButtonClass}`}
     >
       {label}
     </button>
   );
 }
 
-function PricingGroup({ title, plans, billing, onSelectPlan }: { title: string; plans: PricingPlan[]; billing: BillingInterval; onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
-  return (
-    <div>
-      <h3 className="mb-5 text-lg font-semibold">{title}</h3>
-      <div className={`grid items-stretch gap-4 ${getPricingGridClass(plans.length)}`}>
-        {plans.map((plan) => (
-          <PricingPlanCard key={plan.id} plan={plan} billing={billing} onSelectPlan={onSelectPlan} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function PricingPlanCard({ plan, billing, onSelectPlan }: { plan: PricingPlan; billing: BillingInterval; onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
-  const appliedBilling = plan.group === 'trial' ? 'monthly' : billing;
+  const appliedBilling = plan.id === 'free-trial' ? 'monthly' : billing;
   return (
     <article className="flex min-h-full flex-col rounded-2xl border border-border bg-background p-6 sm:p-7">
       <PlanPrice plan={plan} billing={appliedBilling} />
@@ -538,7 +581,7 @@ function PricingPlanCard({ plan, billing, onSelectPlan }: { plan: PricingPlan; b
         <PricingFact label="PAYG credits minimum" value={`$${plan.paygCreditsMinimum}`} />
       </dl>
       <Button type="button" variant="outline" onClick={() => onSelectPlan(plan.id, appliedBilling)} className="mt-auto w-full rounded-full bg-transparent">
-        {plan.group === 'trial' ? 'Start trial' : 'Choose plan'}
+        {plan.id === 'free-trial' ? 'Start trial' : 'Choose plan'}
         <ArrowRight aria-hidden="true" />
       </Button>
     </article>
@@ -582,9 +625,8 @@ function PricingFact({ label, value }: { label: string; value: string }) {
 }
 
 function getPricingGridClass(planCount: number) {
-  if (planCount === 1) return 'max-w-sm';
-  if (planCount === 3) return 'md:grid-cols-3';
-  return 'sm:grid-cols-2 xl:grid-cols-4';
+  if (planCount === 2) return 'md:grid-cols-2 lg:max-w-4xl';
+  return 'md:grid-cols-3';
 }
 
 function formatPrice(price: number) {
