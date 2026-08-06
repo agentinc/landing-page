@@ -35,7 +35,7 @@ export function CursorGlow() {
       className="pointer-events-none fixed top-0 left-0 z-50 -translate-x-1/2 -translate-y-1/2 will-change-transform transition-opacity duration-300"
       style={{ transform: 'translate(-200px, -200px)' }}
     >
-      <div className="h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px]" />
+      <div className="h-[500px] w-[500px] rounded-full bg-muted/40 blur-[120px]" />
     </div>
   );
 }

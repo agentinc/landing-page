@@ -139,7 +139,7 @@ function Header({
 }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-5">
-      <div className="mx-auto max-w-7xl rounded-full border border-primary/20 bg-background/95 px-4 py-2.5 shadow-sm sm:px-5">
+      <div className="mx-auto max-w-7xl rounded-full border border-brand/20 bg-background/95 px-4 py-2.5 shadow-sm sm:px-5">
         <div className="flex items-center justify-between gap-3">
           <button
             type="button"
@@ -157,7 +157,7 @@ function Header({
                 key={item.target}
                 type="button"
                 onClick={() => onNavigate(item.target)}
-                className="rounded-full text-sm text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="rounded-full text-sm text-muted-foreground transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {item.label}
               </button>
@@ -215,13 +215,13 @@ function Hero({ onJoinBeta, onLearnMore }: { onJoinBeta: () => void; onLearnMore
       <div className="pointer-events-none absolute inset-0 landing-grid" />
       <div className="relative mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[1.04fr_0.96fr] lg:gap-20">
         <div className="max-w-4xl">
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/35 bg-primary/10 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-primary">
-            <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
+          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-brand/35 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-brand">
+            <span className="size-1.5 rounded-full bg-brand" aria-hidden="true" />
             Private beta
           </div>
           <h1 className="max-w-5xl text-[clamp(2.9rem,7.2vw,6.7rem)] font-bold leading-[0.94] tracking-[-0.065em]">
             Run any AI agent.
-            <span className="block text-primary">Rewrite nothing.</span>
+            <span className="block text-brand">Rewrite nothing.</span>
           </h1>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
             Bring agents built with OpenAI, Anthropic, LangChain, CrewAI, or your own Python. Agentinc gives your team one managed cloud platform to deploy, manage, and scale them.
@@ -257,8 +257,8 @@ function Hero({ onJoinBeta, onLearnMore }: { onJoinBeta: () => void; onLearnMore
 function CloudPlatformMap() {
   return (
     <figure className="relative mx-auto w-full max-w-xl" aria-label="Agentinc cloud deployment flow">
-      <div className="absolute -inset-12 -z-10 rounded-full bg-primary/10 blur-3xl" />
-      <div className="overflow-hidden rounded-2xl border border-primary/20 bg-card">
+      <div className="absolute -inset-12 -z-10 rounded-full bg-muted/40 blur-3xl" />
+      <div className="overflow-hidden rounded-2xl border border-brand/20 bg-card">
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="size-2 rounded-full bg-muted-foreground/40" />
@@ -297,7 +297,7 @@ function PlatformNode({
 }) {
   return (
     <div className="flex items-center gap-4 rounded-xl border border-border bg-background p-4">
-      <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-primary/25 bg-primary/10 text-primary [&_svg]:size-4">
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand/25 text-brand [&_svg]:size-4">
         {icon}
       </div>
       <div className="min-w-0">
@@ -324,8 +324,8 @@ function ManagedCloudNode() {
 
 function FlowConnector({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-3 px-5 text-[10px] uppercase tracking-[0.18em] text-primary">
-      <span className="h-6 w-px bg-primary/50" />
+    <div className="flex items-center gap-3 px-5 text-[10px] uppercase tracking-[0.18em] text-brand">
+      <span className="h-6 w-px bg-brand/50" />
       {label}
     </div>
   );
@@ -335,7 +335,7 @@ function CompatibilityStrip() {
   return (
     <section aria-label="Supported agent frameworks" className="border-y border-border px-5 sm:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-5 py-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="shrink-0 text-sm text-primary">Keep your framework</p>
+        <p className="shrink-0 text-sm text-brand">Keep your framework</p>
         <div className="flex flex-wrap gap-x-7 gap-y-3 sm:justify-end">
           {frameworks.map((framework) => (
             <span key={framework} className="text-sm font-medium text-foreground/80">
@@ -354,7 +354,7 @@ function HowItWorks() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
           <div>
-            <p className="text-sm font-medium text-primary">How it works</p>
+            <p className="text-sm font-medium text-brand">How it works</p>
             <h2 className="mt-4 max-w-md text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
               Your agent works. Moving it should not mean rebuilding it.
             </h2>
@@ -362,7 +362,7 @@ function HowItWorks() {
           <div className="border-t border-border">
             {steps.map((step) => (
               <article key={step.number} className="grid gap-4 border-b border-border py-8 sm:grid-cols-[4rem_0.8fr_1.2fr] sm:gap-8 sm:py-10">
-                <span className="font-mono text-xs text-primary">{step.number}</span>
+                <span className="font-mono text-xs text-brand">{step.number}</span>
                 <h3 className="text-xl font-semibold leading-snug">{step.title}</h3>
                 <p className="max-w-xl leading-relaxed text-muted-foreground">{step.description}</p>
               </article>
@@ -420,7 +420,7 @@ function DeploymentStatus({ label, detail }: { label: string; detail: string }) 
   return (
     <div className="flex items-center justify-between gap-5 rounded-xl border border-border bg-card p-4">
       <div className="flex items-center gap-3">
-        <Check aria-hidden="true" className="size-3.5 text-primary" />
+        <Check aria-hidden="true" className="size-3.5 text-brand" />
         <span className="text-sm font-medium">{label}</span>
       </div>
       <span className="text-right text-sm text-muted-foreground">{detail}</span>
@@ -445,7 +445,7 @@ function PlatformSection() {
     <section className="px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-3xl">
-          <p className="text-sm font-medium text-primary">One cloud platform</p>
+          <p className="text-sm font-medium text-brand">One cloud platform</p>
           <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
             Everything your team needs to put agents to work.
           </h2>
@@ -457,7 +457,7 @@ function PlatformSection() {
               key={label}
               className={`grid grid-cols-[auto_1fr] gap-5 py-8 md:p-10 ${index % 2 === 0 ? 'md:border-r md:border-border' : ''} ${index < 2 ? 'border-b border-border' : ''}`}
             >
-              <div className="flex size-10 items-center justify-center rounded-full border border-primary/25 bg-primary/10 text-primary">
+              <div className="flex size-10 items-center justify-center rounded-full border border-brand/25 text-brand">
                 <Icon aria-hidden="true" className="size-4" />
               </div>
               <div>
@@ -515,7 +515,7 @@ function PricingPlansPanel({ family, billing, onSelectPlan }: { family: PricingF
 function PricingHeader() {
   return (
     <div className="max-w-3xl">
-      <p className="text-sm font-medium text-primary">Pricing</p>
+      <p className="text-sm font-medium text-brand">Pricing</p>
       <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">Start small. Add agents as your work grows.</h2>
       <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">Every paid plan can be billed annually. Pay for 10 months and use Agentinc for 12.</p>
     </div>
@@ -524,7 +524,7 @@ function PricingHeader() {
 
 function PricingFamilySwitch({ activeFamily, onFamilyChange }: { activeFamily: PricingFamily; onFamilyChange: (family: PricingFamily) => void }) {
   return (
-    <div className="inline-flex w-full rounded-full border border-primary/20 bg-background p-1 sm:w-fit" role="group" aria-label="Plan family">
+    <div className="inline-flex w-full rounded-full border border-brand/20 bg-background p-1 sm:w-fit" role="group" aria-label="Plan family">
       {pricingFamilyOrder.map((family) => {
         const isActive = activeFamily === family;
         return (
@@ -545,7 +545,7 @@ function PricingFamilySwitch({ activeFamily, onFamilyChange }: { activeFamily: P
 
 function BillingSwitch({ billing, onBillingChange }: { billing: BillingInterval; onBillingChange: (billing: BillingInterval) => void }) {
   return (
-    <div className="inline-flex w-full rounded-full border border-primary/20 bg-background p-1 sm:w-fit" aria-label="Billing interval">
+    <div className="inline-flex w-full rounded-full border border-brand/20 bg-background p-1 sm:w-fit" aria-label="Billing interval">
       <BillingButton label="Monthly" interval="monthly" activeBilling={billing} onBillingChange={onBillingChange} />
       <BillingButton label="Annual · 2 free" interval="annual" activeBilling={billing} onBillingChange={onBillingChange} />
     </div>
@@ -569,7 +569,7 @@ function BillingButton({ label, interval, activeBilling, onBillingChange }: { la
 function PricingPlanCard({ plan, billing, onSelectPlan }: { plan: PricingPlan; billing: BillingInterval; onSelectPlan: (planId: string, billing: BillingInterval) => void }) {
   const appliedBilling = plan.id === 'free-trial' ? 'monthly' : billing;
   return (
-    <article className="flex min-h-full flex-col rounded-2xl border border-primary/20 bg-background p-6 transition-colors hover:border-primary/50 sm:p-7">
+    <article className="flex min-h-full flex-col rounded-2xl border border-brand/20 bg-background p-6 transition-colors hover:border-brand/50 sm:p-7">
       <PlanPrice plan={plan} billing={appliedBilling} />
       <dl className="my-7 divide-y divide-border border-y border-border">
         <PricingFact label="Agents" value={`${plan.agents}`} />
@@ -590,7 +590,7 @@ function PlanPrice({ plan, billing }: { plan: PricingPlan; billing: BillingInter
     return (
       <div>
         <h4 className="text-xl font-semibold">{plan.name}</h4>
-        <p className="mt-5 text-4xl font-semibold tracking-tight text-primary">$0</p>
+        <p className="mt-5 text-4xl font-semibold tracking-tight text-brand">$0</p>
         <p className="mt-2 text-sm text-muted-foreground">Free for {plan.durationDays} days</p>
       </div>
     );
@@ -602,7 +602,7 @@ function PlanPrice({ plan, billing }: { plan: PricingPlan; billing: BillingInter
     <div>
       <h4 className="text-xl font-semibold">{plan.name}</h4>
       <p className="mt-5 flex items-end gap-2">
-        <span className="text-4xl font-semibold tracking-tight text-primary">${billing === 'monthly' ? plan.monthlyPrice : annualTotal}</span>
+        <span className="text-4xl font-semibold tracking-tight text-brand">${billing === 'monthly' ? plan.monthlyPrice : annualTotal}</span>
         <span className="pb-1 text-sm text-muted-foreground">/ {billing === 'monthly' ? 'month' : 'year'}</span>
       </p>
       <p className="mt-2 min-h-5 text-sm text-muted-foreground">
@@ -635,7 +635,7 @@ function MarketplaceSection() {
     <section id="marketplace" className="border-y border-border bg-card px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-end lg:gap-24">
         <div>
-          <p className="text-sm font-medium text-primary">Marketplace distribution</p>
+          <p className="text-sm font-medium text-brand">Marketplace distribution</p>
           <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
             Publish once. Install into any tenant.
           </h2>
@@ -647,11 +647,11 @@ function MarketplaceSection() {
         <div className="grid gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center">
           {['Publish', 'Review', 'Install'].map((stage, index) => (
             <div key={stage} className="contents">
-              <div className="rounded-xl border border-primary/20 bg-background p-5">
-                <span className="font-mono text-[10px] text-primary">0{index + 1}</span>
+              <div className="rounded-xl border border-brand/20 bg-background p-5">
+                <span className="font-mono text-[10px] text-brand">0{index + 1}</span>
                 <div className="mt-8 text-lg font-semibold">{stage}</div>
               </div>
-              {index < 2 && <ChevronRight aria-hidden="true" className="mx-auto hidden size-4 text-primary sm:block" />}
+              {index < 2 && <ChevronRight aria-hidden="true" className="mx-auto hidden size-4 text-brand sm:block" />}
             </div>
           ))}
         </div>
@@ -666,7 +666,7 @@ function BetaSection({ selectedPlan, selectedBilling }: { selectedPlan: string; 
       <div className="pointer-events-none absolute inset-0 landing-grid opacity-40" />
       <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/35 bg-primary/10 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-primary">
+          <div className="inline-flex items-center gap-2 rounded-full border border-brand/35 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-brand">
             Private beta access
           </div>
           <h2 className="mt-7 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
@@ -678,7 +678,7 @@ function BetaSection({ selectedPlan, selectedBilling }: { selectedPlan: string; 
           <ul className="mt-9 space-y-4 text-sm text-muted-foreground">
             {['Framework-independent onboarding', 'Managed cloud deployment', 'Direct access to the Agentinc team'].map((benefit) => (
               <li key={benefit} className="flex items-center gap-3">
-                <span className="flex size-5 items-center justify-center rounded-full border border-primary/30 text-primary">
+                <span className="flex size-5 items-center justify-center rounded-full border border-brand/30 text-brand">
                   <Check aria-hidden="true" className="size-3" />
                 </span>
                 {benefit}
@@ -694,9 +694,9 @@ function BetaSection({ selectedPlan, selectedBilling }: { selectedPlan: string; 
 
 function Footer({ onNavigate }: { onNavigate: (target: string) => void }) {
   return (
-    <footer className="border-t border-primary/20 px-5 py-8 sm:px-8">
+    <footer className="border-t border-brand/20 px-5 py-8 sm:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-5 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <button type="button" onClick={() => onNavigate('top')} className="flex items-center gap-2 text-primary">
+        <button type="button" onClick={() => onNavigate('top')} className="flex items-center gap-2 text-brand">
           <Logo width={19} />
           <span className="font-medium">agentinc</span>
         </button>
