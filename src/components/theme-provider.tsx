@@ -1,81 +1,76 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'dark' | 'light' | 'system'
+export type Theme = 'dark' | 'light' | 'system';
+type ResolvedTheme = Exclude<Theme, 'system'>;
 
 type ThemeProviderProps = {
-  children: React.ReactNode
-  defaultTheme?: Theme
-  storageKey?: string
-}
+  children: React.ReactNode;
+  defaultTheme?: Theme;
+  storageKey?: string;
+};
 
 type ThemeProviderState = {
-  theme: Theme
-  setTheme: (theme: Theme) => void
-}
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+};
 
-const initialState: ThemeProviderState = {
-  theme: 'system',
-  setTheme: () => null,
-}
+const ThemeProviderContext = createContext<ThemeProviderState | undefined>(undefined);
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+function applyTheme(theme: ResolvedTheme) {
+  const root = document.documentElement;
+  root.classList.remove('light', 'dark');
+  root.classList.add(theme);
+  root.style.colorScheme = theme;
+
+  const favicon = document.getElementById('favicon') as HTMLLinkElement | null;
+  if (favicon) favicon.href = theme === 'dark' ? '/logo_white.svg' : '/logo_black.svg';
+
+  const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (themeColor) themeColor.content = getComputedStyle(root).getPropertyValue('--background').trim();
+}
 
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
-  storageKey = 'agentinc-theme',
+  storageKey = 'theme-storage',
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  )
+    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
+  );
 
   useEffect(() => {
-    const root = window.document.documentElement
-
-    root.classList.remove('light', 'dark')
-
-    let actualTheme = theme;
-    if (theme === 'system') {
-      actualTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light'
-
-      root.classList.add(actualTheme)
-    } else {
-      root.classList.add(theme)
-    }
-
-    // Update favicon based on browser's color scheme preference
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const favicon = document.getElementById('favicon') as HTMLLinkElement
-    if (favicon) {
-      favicon.href = isDark ? '/logo_white.svg' : '/logo_black.svg'
-    }
-  }, [theme])
+    const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    const syncTheme = () => {
+      const resolvedTheme = theme === 'system' ? (colorScheme.matches ? 'dark' : 'light') : theme;
+      applyTheme(resolvedTheme);
+    };
+    syncTheme();
+    if (theme !== 'system') return;
+    colorScheme.addEventListener('change', syncTheme);
+    return () => colorScheme.removeEventListener('change', syncTheme);
+  }, [theme]);
 
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
+      localStorage.setItem(storageKey, theme);
+      setTheme(theme);
     },
-  }
+  };
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
       {children}
     </ThemeProviderContext.Provider>
-  )
+  );
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
-  const context = useContext(ThemeProviderContext)
+  const context = useContext(ThemeProviderContext);
 
-  if (context === undefined)
-    throw new Error('useTheme must be used within a ThemeProvider')
+  if (context === undefined) throw new Error('useTheme must be used within a ThemeProvider');
 
-  return context
-}
+  return context;
+};
