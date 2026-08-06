@@ -696,7 +696,7 @@ function Footer({ onNavigate }: { onNavigate: (target: string) => void }) {
   return (
     <footer className="border-t border-brand/20 px-5 py-8 sm:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-5 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <button type="button" onClick={() => onNavigate('top')} className="flex items-center gap-2 text-brand">
+        <button type="button" onClick={() => onNavigate('top')} className="flex items-center gap-2 text-foreground">
           <Logo width={19} />
           <span className="font-medium">agentinc</span>
         </button>
