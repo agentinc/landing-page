@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo_white.svg" id="favicon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#101411" />
+    <meta name="theme-color" content="#f5f7f5" />
     <meta name="description" content="Agentinc is the managed cloud platform and marketplace for deploying, managing, and scaling AI agents." />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Agentinc | Run any AI agent. Rewrite nothing." />
@@ -16,22 +16,21 @@
     <link rel="canonical" href="https://withagentinc.com/" />
     <title>Agentinc | Run any AI agent. Rewrite nothing.</title>
     <script>
-      // Set favicon based on browser's color scheme preference
-      (function() {
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const favicon = document.getElementById('favicon');
-        if (favicon) {
-          favicon.href = isDark ? '/logo_white.svg' : '/logo_black.svg';
-        }
-
-        // Listen for changes in browser theme
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-          const favicon = document.getElementById('favicon');
-          if (favicon) {
-            favicon.href = e.matches ? '/logo_white.svg' : '/logo_black.svg';
-          }
-        });
-      })();
+      ;(function () {
+        try {
+          var stored = localStorage.getItem('theme-storage')
+          var dark =
+            stored === 'dark' ||
+            ((stored === null || stored === 'system') &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          var root = document.documentElement
+          root.classList.toggle('dark', dark)
+          root.classList.toggle('light', !dark)
+          root.style.colorScheme = dark ? 'dark' : 'light'
+          document.getElementById('favicon').href = dark ? '/logo_white.svg' : '/logo_black.svg'
+          document.querySelector('meta[name="theme-color"]').content = dark ? '#101411' : '#f5f7f5'
+        } catch (e) {}
+      })()
     </script>
   </head>
   <body>

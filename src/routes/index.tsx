@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/shadcn/components/ui/button';
 import { ContactUs } from '../components/contact-us';
+import { ThemeToggle } from '../components/theme-toggle';
 import {
   type BillingInterval,
   type PricingFamily,
@@ -165,6 +166,7 @@ function Header({
           </nav>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Button
               type="button"
               onClick={() => onNavigate('beta')}
@@ -694,9 +696,9 @@ function BetaSection({ selectedPlan, selectedBilling }: { selectedPlan: string; 
 
 function Footer({ onNavigate }: { onNavigate: (target: string) => void }) {
   return (
-    <footer className="border-t border-brand/20 px-5 py-8 sm:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-5 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <button type="button" onClick={() => onNavigate('top')} className="flex items-center gap-2 text-foreground">
+    <footer className="border-t border-brand/20 bg-footer px-5 py-8 text-footer-foreground sm:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 text-sm text-footer-foreground/60 sm:flex-row sm:items-center sm:justify-between">
+        <button type="button" onClick={() => onNavigate('top')} className="flex items-center gap-2 text-footer-foreground">
           <Logo width={19} />
           <span className="font-medium">agentinc</span>
         </button>
