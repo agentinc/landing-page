@@ -12,7 +12,7 @@ export function ContactUs({ defaultPlan, defaultBilling }: { defaultPlan: string
   const accessKey = import.meta.env.VITE_PUBLIC_WEB3FORMS_ACCESS_KEY;
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 sm:p-8">
+    <div className="rounded-2xl border border-primary/20 bg-card p-5 sm:p-8">
       <div className="mb-7">
         <h3 className="text-2xl font-semibold tracking-tight">Request beta access</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
