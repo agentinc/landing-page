@@ -221,9 +221,9 @@ function Hero({ onJoinBeta, onLearnMore }: { onJoinBeta: () => void; onLearnMore
             <span className="size-1.5 rounded-full bg-brand" aria-hidden="true" />
             Private beta
           </div>
-          <h1 className="max-w-5xl text-balance text-[clamp(3rem,5.8vw,5.35rem)] font-semibold leading-[0.98] tracking-[-0.04em]">
+          <h1 className="max-w-5xl text-[clamp(2.9rem,7.2vw,6.7rem)] font-bold leading-[0.94] tracking-[-0.065em]">
             Your agents.
-            <span className="block">One managed cloud.</span>
+            <span className="block text-brand">One managed cloud.</span>
           </h1>
           <p className="mt-8 max-w-[42rem] text-lg leading-relaxed text-muted-foreground sm:text-xl">
             Deploy, manage, and scale every AI agent from one secure platform. Your teams keep the tools they use. You gain one place to operate.
