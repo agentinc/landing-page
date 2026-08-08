@@ -22,9 +22,6 @@ function applyTheme(theme: ResolvedTheme) {
   root.classList.add(theme);
   root.style.colorScheme = theme;
 
-  const favicon = document.getElementById('favicon') as HTMLLinkElement | null;
-  if (favicon) favicon.href = theme === 'dark' ? '/logo_white.svg' : '/logo_black.svg';
-
   const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
   if (themeColor) themeColor.content = getComputedStyle(root).getPropertyValue('--background').trim();
 }
