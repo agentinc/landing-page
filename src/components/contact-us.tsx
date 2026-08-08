@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRightIcon } from '@phosphor-icons/react/dist/csr/ArrowRight';
 import { Button } from '@/shadcn/components/ui/button';
 import { Input } from '@/shadcn/components/ui/input';
 import { Label } from '@/shadcn/components/ui/label';
@@ -33,7 +33,7 @@ export function ContactUs({ defaultPlan, defaultBilling }: { defaultPlan: string
           className="h-12 w-full rounded-full text-base"
         >
           Request access
-          <ArrowRight aria-hidden="true" />
+          <ArrowRightIcon aria-hidden="true" />
         </Button>
 
         <p className="text-center text-xs leading-relaxed text-muted-foreground">

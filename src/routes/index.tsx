@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import {
-  ArrowRight,
-  Braces,
-  Check,
-  ChevronRight,
-  Cloud,
-  Link2,
-  Menu,
-  Settings2,
-  UsersRound,
-  X,
-} from 'lucide-react';
+import { ArrowRightIcon } from '@phosphor-icons/react/dist/csr/ArrowRight';
+import { BracketsCurlyIcon } from '@phosphor-icons/react/dist/csr/BracketsCurly';
+import { CaretRightIcon } from '@phosphor-icons/react/dist/csr/CaretRight';
+import { CheckIcon } from '@phosphor-icons/react/dist/csr/Check';
+import { CloudIcon } from '@phosphor-icons/react/dist/csr/Cloud';
+import { LinkIcon } from '@phosphor-icons/react/dist/csr/Link';
+import { ListIcon } from '@phosphor-icons/react/dist/csr/List';
+import { SlidersHorizontalIcon } from '@phosphor-icons/react/dist/csr/SlidersHorizontal';
+import { UsersThreeIcon } from '@phosphor-icons/react/dist/csr/UsersThree';
+import { XIcon } from '@phosphor-icons/react/dist/csr/X';
 import { Button } from '@/shadcn/components/ui/button';
 import { ContactUs } from '../components/contact-us';
 import { ThemeToggle } from '../components/theme-toggle';
@@ -70,22 +68,22 @@ const platformCapabilities = [
   {
     label: 'Framework flexibility',
     description: 'Bring agents built with the frameworks and model providers your team already uses.',
-    icon: Braces,
+    icon: BracketsCurlyIcon,
   },
   {
     label: 'Managed deployment',
     description: 'Move from setup to a cloud deployment without managing infrastructure yourself.',
-    icon: Cloud,
+    icon: CloudIcon,
   },
   {
     label: 'Connected workflows',
     description: 'Give agents access to the services and workflows they need from one place.',
-    icon: Link2,
+    icon: LinkIcon,
   },
   {
     label: 'Team workspace',
     description: 'Organize access, activity, and collaboration as your use of agents grows.',
-    icon: UsersRound,
+    icon: UsersThreeIcon,
   },
 ];
 
@@ -173,7 +171,7 @@ function Header({
               className="hidden h-10 rounded-full px-5 sm:inline-flex"
             >
               Join the beta
-              <ArrowRight aria-hidden="true" />
+              <ArrowRightIcon aria-hidden="true" />
             </Button>
             <button
               type="button"
@@ -183,7 +181,7 @@ function Header({
               aria-controls="mobile-navigation"
               aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'}
             >
-              {mobileMenuOpen ? <X aria-hidden="true" className="size-4" /> : <Menu aria-hidden="true" className="size-4" />}
+              {mobileMenuOpen ? <XIcon aria-hidden="true" className="size-4" /> : <ListIcon aria-hidden="true" className="size-4" />}
             </button>
           </div>
         </div>
@@ -202,7 +200,7 @@ function Header({
             ))}
             <Button type="button" onClick={() => onNavigate('beta')} className="mt-2 rounded-full sm:hidden">
               Join the beta
-              <ArrowRight aria-hidden="true" />
+              <ArrowRightIcon aria-hidden="true" />
             </Button>
           </nav>
         )}
@@ -236,7 +234,7 @@ function Hero({ onJoinBeta, onLearnMore }: { onJoinBeta: () => void; onLearnMore
               className="h-12 rounded-full px-7 text-base"
             >
               Join the private beta
-              <ArrowRight aria-hidden="true" />
+              <ArrowRightIcon aria-hidden="true" />
             </Button>
             <Button
               size="lg"
@@ -270,9 +268,9 @@ function CloudPlatformMap() {
           <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">cloud.workspace</span>
         </div>
         <div className="space-y-3 p-4 sm:p-6">
-          <PlatformNode label="Your agent" detail="built with your preferred framework" icon={<Braces aria-hidden="true" />} />
+          <PlatformNode label="Your agent" detail="built with your preferred framework" icon={<BracketsCurlyIcon aria-hidden="true" />} />
           <FlowConnector label="connect" />
-          <PlatformNode label="Agentinc setup" detail="guided configuration for your team" icon={<Settings2 aria-hidden="true" />} />
+          <PlatformNode label="Agentinc setup" detail="guided configuration for your team" icon={<SlidersHorizontalIcon aria-hidden="true" />} />
           <FlowConnector label="deploy" />
           <ManagedCloudNode />
         </div>
@@ -314,7 +312,7 @@ function ManagedCloudNode() {
   return (
     <div className="flex items-center gap-4 rounded-xl border border-primary bg-primary p-4 text-primary-foreground">
       <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-primary-foreground/20 [&_svg]:size-4">
-        <Cloud aria-hidden="true" />
+        <CloudIcon aria-hidden="true" />
       </div>
       <div className="min-w-0">
         <div className="text-sm font-medium">Agentinc cloud</div>
@@ -394,14 +392,14 @@ function ManagedPlatformPreview({ onJoinBeta }: { onJoinBeta: () => void }) {
             className="mt-9 h-12 rounded-full border border-primary-foreground/20 bg-primary-foreground px-7 text-base text-primary hover:bg-primary-foreground/90"
           >
             Bring your agent
-            <ArrowRight aria-hidden="true" />
+            <ArrowRightIcon aria-hidden="true" />
           </Button>
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-primary-foreground/20 bg-background text-foreground shadow-md">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Cloud aria-hidden="true" className="size-4" />
+              <CloudIcon aria-hidden="true" className="size-4" />
               Example workflow
             </div>
             <span className="font-mono text-[10px] text-muted-foreground">Agentinc Cloud</span>
@@ -422,7 +420,7 @@ function DeploymentStatus({ label, detail }: { label: string; detail: string }) 
   return (
     <div className="flex items-center justify-between gap-5 rounded-xl border border-border bg-card p-4">
       <div className="flex items-center gap-3">
-        <Check aria-hidden="true" className="size-3.5 text-brand" />
+        <CheckIcon aria-hidden="true" className="size-3.5 text-brand" weight="bold" />
         <span className="text-sm font-medium">{label}</span>
       </div>
       <span className="text-right text-sm text-muted-foreground">{detail}</span>
@@ -434,7 +432,7 @@ function ReadyDeploymentStatus() {
   return (
     <div className="flex items-center justify-between gap-5 rounded-xl border border-primary bg-primary p-4 text-primary-foreground">
       <div className="flex items-center gap-3">
-        <Check aria-hidden="true" className="size-3.5" />
+        <CheckIcon aria-hidden="true" className="size-3.5" weight="bold" />
         <span className="text-sm font-medium">Deployment</span>
       </div>
       <span className="text-right text-sm text-primary-foreground/65">Ready to deploy</span>
@@ -581,7 +579,7 @@ function PricingPlanCard({ plan, billing, onSelectPlan }: { plan: PricingPlan; b
       </dl>
       <Button type="button" variant="outline" onClick={() => onSelectPlan(plan.id, appliedBilling)} className="mt-auto w-full rounded-full border-primary/30 bg-transparent text-primary hover:bg-primary hover:text-primary-foreground">
         {plan.id === 'free-trial' ? 'Start trial' : 'Choose plan'}
-        <ArrowRight aria-hidden="true" />
+        <ArrowRightIcon aria-hidden="true" />
       </Button>
     </article>
   );
@@ -653,7 +651,7 @@ function MarketplaceSection() {
                 <span className="font-mono text-[10px] text-brand">0{index + 1}</span>
                 <div className="mt-8 text-lg font-semibold">{stage}</div>
               </div>
-              {index < 2 && <ChevronRight aria-hidden="true" className="mx-auto hidden size-4 text-brand sm:block" />}
+              {index < 2 && <CaretRightIcon aria-hidden="true" className="mx-auto hidden size-4 text-brand sm:block" />}
             </div>
           ))}
         </div>
@@ -681,7 +679,7 @@ function BetaSection({ selectedPlan, selectedBilling }: { selectedPlan: string; 
             {['Framework-independent onboarding', 'Managed cloud deployment', 'Direct access to the Agentinc team'].map((benefit) => (
               <li key={benefit} className="flex items-center gap-3">
                 <span className="flex size-5 items-center justify-center rounded-full border border-brand/30 text-brand">
-                  <Check aria-hidden="true" className="size-3" />
+                  <CheckIcon aria-hidden="true" className="size-3" weight="bold" />
                 </span>
                 {benefit}
               </li>
