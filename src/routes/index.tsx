@@ -213,7 +213,7 @@ function Hero({ onJoinBeta, onLearnMore }: { onJoinBeta: () => void; onLearnMore
   return (
     <section id="top" className="relative px-5 pb-20 pt-36 sm:px-8 sm:pb-28 sm:pt-44 lg:min-h-[900px] lg:py-40">
       <div className="pointer-events-none absolute inset-0 landing-grid" />
-      <div className="relative mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[1.04fr_0.96fr] lg:gap-20">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] items-center gap-16 lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)] lg:gap-20">
         <div className="max-w-4xl">
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-brand/35 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-brand">
             <span className="size-1.5 rounded-full bg-brand" aria-hidden="true" />

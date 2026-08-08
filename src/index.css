@@ -98,6 +98,10 @@
     overflow-x: clip;
   }
 
+  section[id] {
+    scroll-margin-top: 6rem;
+  }
+
   body {
     @apply m-0 bg-background text-foreground antialiased;
     min-width: 320px;
