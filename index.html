@@ -27,6 +27,8 @@
             ((stored === null || stored === 'system') &&
               window.matchMedia('(prefers-color-scheme: dark)').matches)
           var root = document.documentElement
+          var accent = localStorage.getItem('accent-storage')
+          root.dataset.accent = accent || 'blue'
           root.classList.toggle('dark', dark)
           root.classList.toggle('light', !dark)
           root.style.colorScheme = dark ? 'dark' : 'light'

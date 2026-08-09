@@ -32,6 +32,7 @@
   --color-brand: var(--brand);
   --color-footer: var(--footer);
   --color-footer-foreground: var(--footer-foreground);
+  --color-swatch-foreground: var(--swatch-foreground);
   --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
@@ -54,10 +55,11 @@
   --destructive: oklch(0.55 0.19 25.5);
   --border: oklch(0.9 0.006 220);
   --input: oklch(0.86 0.008 220);
-  --ring: oklch(0.5 0.11 190);
-  --brand: oklch(0.46 0.1 190);
+  --ring: oklch(0.48 0.16 255);
+  --brand: oklch(0.48 0.16 255);
   --footer: oklch(0.145 0.006 240);
   --footer-foreground: oklch(1 0 0);
+  --swatch-foreground: oklch(0.985 0.002 180);
   --radius: 0.625rem;
   color-scheme: light;
 }
@@ -80,12 +82,73 @@
   --destructive: oklch(0.55 0.19 25.5);
   --border: oklch(0.285 0.01 240);
   --input: oklch(0.31 0.012 240);
-  --ring: oklch(0.72 0.11 190);
-  --brand: oklch(0.74 0.12 190);
+  --ring: oklch(0.72 0.15 255);
+  --brand: oklch(0.72 0.15 255);
   --footer: oklch(0.145 0.006 240);
   --footer-foreground: oklch(1 0 0);
+  --swatch-foreground: oklch(0.985 0.002 180);
   --radius: 0.625rem;
   color-scheme: dark;
+}
+
+:root[data-accent='teal'] {
+  --brand: oklch(0.46 0.1 190);
+  --ring: oklch(0.46 0.1 190);
+}
+
+:root[data-accent='emerald'] {
+  --brand: oklch(0.45 0.12 155);
+  --ring: oklch(0.45 0.12 155);
+}
+
+:root[data-accent='dark-orange'] {
+  --brand: oklch(0.48 0.15 52);
+  --ring: oklch(0.48 0.15 52);
+}
+
+:root[data-accent='dark-red'] {
+  --brand: oklch(0.46 0.15 25);
+  --ring: oklch(0.46 0.15 25);
+}
+
+.dark[data-accent='teal'] {
+  --brand: oklch(0.74 0.12 190);
+  --ring: oklch(0.74 0.12 190);
+}
+
+.dark[data-accent='emerald'] {
+  --brand: oklch(0.74 0.14 155);
+  --ring: oklch(0.74 0.14 155);
+}
+
+.dark[data-accent='dark-orange'] {
+  --brand: oklch(0.75 0.14 60);
+  --ring: oklch(0.75 0.14 60);
+}
+
+.dark[data-accent='dark-red'] {
+  --brand: oklch(0.72 0.16 25);
+  --ring: oklch(0.72 0.16 25);
+}
+
+.accent-swatch[data-accent-swatch='blue'] {
+  background: oklch(0.48 0.16 255);
+}
+
+.accent-swatch[data-accent-swatch='teal'] {
+  background: oklch(0.46 0.1 190);
+}
+
+.accent-swatch[data-accent-swatch='emerald'] {
+  background: oklch(0.45 0.12 155);
+}
+
+.accent-swatch[data-accent-swatch='dark-orange'] {
+  background: oklch(0.48 0.15 52);
+}
+
+.accent-swatch[data-accent-swatch='dark-red'] {
+  background: oklch(0.46 0.15 25);
 }
 
 @layer base {

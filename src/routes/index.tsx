@@ -11,6 +11,7 @@ import { SlidersHorizontalIcon } from '@phosphor-icons/react/dist/csr/SlidersHor
 import { UsersThreeIcon } from '@phosphor-icons/react/dist/csr/UsersThree';
 import { XIcon } from '@phosphor-icons/react/dist/csr/X';
 import { Button } from '@/shadcn/components/ui/button';
+import { AccentPicker } from '../components/accent-picker';
 import { ContactUs } from '../components/contact-us';
 import { ThemeToggle } from '../components/theme-toggle';
 import {
@@ -123,6 +124,7 @@ function LandingPage() {
       </main>
 
       <Footer onNavigate={scrollTo} />
+      <AccentPicker />
     </div>
   );
 }
