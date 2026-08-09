@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { CheckIcon } from '@phosphor-icons/react/dist/csr/Check';
 import { PaletteIcon } from '@phosphor-icons/react/dist/csr/Palette';
 
@@ -14,6 +14,13 @@ const heroPatternOptions = [
   { value: 'dots', label: 'Dots' },
   { value: 'lines', label: 'Lines' },
 ] as const;
+
+const heroPatternOpacity = {
+  minimum: 20,
+  maximum: 100,
+  step: 5,
+  defaultValue: 70,
+} as const;
 
 type AccentColor = (typeof accentOptions)[number]['value'];
 type AccentOption = (typeof accentOptions)[number];
@@ -38,7 +45,14 @@ function storedHeroPattern(): HeroPattern {
   return isHeroPattern(stored) ? stored : 'lines';
 }
 
-function isAccentPickerEnabled() {
+function storedHeroPatternOpacity(): number {
+  const stored = Number(localStorage.getItem('hero-pattern-opacity-storage'));
+  return Number.isFinite(stored) && stored >= heroPatternOpacity.minimum && stored <= heroPatternOpacity.maximum
+    ? stored
+    : heroPatternOpacity.defaultValue;
+}
+
+function isDesignPickerEnabled() {
   const hostname = window.location.hostname;
   return (
     import.meta.env.DEV ||
@@ -96,10 +110,17 @@ function PatternSwatch({
 }
 
 export function DesignPicker() {
+  const pickerEnabled = isDesignPickerEnabled();
   const [accent, setAccent] = useState<AccentColor>(storedAccent);
   const [heroPattern, setHeroPattern] = useState<HeroPattern>(storedHeroPattern);
+  const [patternOpacity, setPatternOpacity] = useState<number>(storedHeroPatternOpacity);
 
-  if (!isAccentPickerEnabled()) return null;
+  useLayoutEffect(() => {
+    if (!pickerEnabled) return;
+    document.documentElement.style.setProperty('--hero-pattern-opacity', String(patternOpacity / 100));
+  }, [patternOpacity, pickerEnabled]);
+
+  if (!pickerEnabled) return null;
 
   const selectAccent = (nextAccent: AccentColor) => {
     document.documentElement.dataset.accent = nextAccent;
@@ -113,13 +134,18 @@ export function DesignPicker() {
     setHeroPattern(nextPattern);
   };
 
+  const selectPatternOpacity = (nextOpacity: number) => {
+    localStorage.setItem('hero-pattern-opacity-storage', String(nextOpacity));
+    setPatternOpacity(nextOpacity);
+  };
+
   return (
-    <aside className="fixed right-4 top-1/2 z-[60] hidden -translate-y-1/2 flex-col gap-3 rounded-xl border border-border bg-card p-3 text-card-foreground shadow-md lg:flex" aria-label="Development design picker">
+    <aside className="fixed right-4 top-1/2 z-[60] hidden w-32 -translate-y-1/2 flex-col gap-3 rounded-xl border border-border bg-card p-3 text-card-foreground shadow-md lg:flex" aria-label="Development design picker">
       <div className="flex items-center gap-2 px-1 text-xs font-medium text-muted-foreground">
         <PaletteIcon aria-hidden="true" className="size-4" />
         Accent
       </div>
-      <div className="flex flex-col gap-2" role="group" aria-label="Accent color">
+      <div className="flex flex-col items-center gap-2" role="group" aria-label="Accent color">
         {accentOptions.map((option) => (
           <AccentSwatch
             key={option.value}
@@ -131,7 +157,7 @@ export function DesignPicker() {
       </div>
       <div className="h-px bg-border" />
       <div className="px-1 text-xs font-medium text-muted-foreground">Hero</div>
-      <div className="flex flex-col gap-2" role="group" aria-label="Hero background pattern">
+      <div className="flex justify-center gap-2" role="group" aria-label="Hero background pattern">
         {heroPatternOptions.map((option) => (
           <PatternSwatch
             key={option.value}
@@ -141,6 +167,22 @@ export function DesignPicker() {
           />
         ))}
       </div>
+      <label className="grid gap-2 text-[10px] text-muted-foreground" htmlFor="hero-pattern-opacity">
+        <span className="flex items-center justify-between">
+          Opacity
+          <output htmlFor="hero-pattern-opacity" className="text-foreground">{patternOpacity}%</output>
+        </span>
+        <input
+          id="hero-pattern-opacity"
+          type="range"
+          min={heroPatternOpacity.minimum}
+          max={heroPatternOpacity.maximum}
+          step={heroPatternOpacity.step}
+          value={patternOpacity}
+          onChange={(event) => selectPatternOpacity(Number(event.currentTarget.value))}
+          className="w-full accent-brand"
+        />
+      </label>
     </aside>
   );
 }
