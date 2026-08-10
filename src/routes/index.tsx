@@ -988,27 +988,27 @@ function ApiKeyFact({ startingCredits }: { startingCredits?: number }) {
 
   return (
     <div className="flex items-center justify-between gap-4 py-4">
-      <dt className="text-sm text-muted-foreground">API Key</dt>
-      <dd className="group relative flex items-center gap-2 text-sm font-medium">
-        <span className="flex size-6 items-center justify-center rounded-full border border-border text-muted-foreground">
-          <XIcon aria-hidden="true" className="size-3.5" weight="bold" />
-          <span className="sr-only">Not included by default</span>
-        </span>
+      <dt className="group relative flex items-center gap-1.5 text-sm text-muted-foreground">
+        API Keys
         <button
           type="button"
           aria-label="API key requirement"
           aria-describedby={tooltipId}
-          className="flex size-6 items-center justify-center rounded-full text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex size-5 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <InfoIcon aria-hidden="true" className="size-4" />
+          <InfoIcon aria-hidden="true" className="size-3.5" />
         </button>
         <span
           id={tooltipId}
           role="tooltip"
-          className="invisible absolute right-0 bottom-full z-50 mb-2 w-64 rounded-lg bg-primary px-3 py-2 text-left text-xs leading-relaxed text-primary-foreground group-focus-within:visible group-hover:visible"
+          className="invisible absolute bottom-full left-0 z-50 mb-2 w-64 rounded-lg bg-primary px-3 py-2 text-left text-xs leading-relaxed text-primary-foreground group-focus-within:visible group-hover:visible"
         >
           {requirement}
         </span>
+      </dt>
+      <dd className="flex items-center text-muted-foreground">
+        <XIcon aria-hidden="true" className="size-4" weight="bold" />
+        <span className="sr-only">Not included by default</span>
       </dd>
     </div>
   );
