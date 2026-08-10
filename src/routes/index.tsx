@@ -300,8 +300,8 @@ function Hero({
             Private beta
           </div>
           <h1 className="max-w-5xl text-[clamp(2.9rem,7.2vw,6.7rem)] font-bold leading-[0.94] tracking-[-0.065em]">
-            Put a team of
-            <span className="block text-brand">AI agents to work.</span>
+            Your agents.
+            <span className="block text-brand">One managed cloud.</span>
           </h1>
           <p className="mt-8 max-w-[42rem] text-lg leading-relaxed text-muted-foreground sm:text-xl">
             Find specialized agents, connect them to the tools your company uses,
