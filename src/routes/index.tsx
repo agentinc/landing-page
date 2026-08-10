@@ -11,7 +11,6 @@ import { SlidersHorizontalIcon } from '@phosphor-icons/react/dist/csr/SlidersHor
 import { UsersThreeIcon } from '@phosphor-icons/react/dist/csr/UsersThree';
 import { XIcon } from '@phosphor-icons/react/dist/csr/X';
 import { Button } from '@/shadcn/components/ui/button';
-import { DesignPicker } from '../components/design-picker';
 import { ContactUs } from '../components/contact-us';
 import { ThemeToggle } from '../components/theme-toggle';
 import {
@@ -121,7 +120,6 @@ function LandingPage() {
       </main>
 
       <Footer onNavigate={scrollTo} />
-      <DesignPicker />
     </div>
   );
 }
@@ -645,7 +643,6 @@ function MarketplaceSection() {
 function BetaSection({ selectedPlan, selectedBilling }: { selectedPlan: string; selectedBilling: BillingInterval }) {
   return (
     <section id="beta" className="relative px-5 py-24 sm:px-8 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 landing-grid opacity-40" />
       <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-brand/35 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-brand">

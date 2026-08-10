@@ -1,47 +1,27 @@
 import { MoonIcon } from '@phosphor-icons/react/dist/csr/Moon';
 import { SunIcon } from '@phosphor-icons/react/dist/csr/Sun';
 import { Button } from '@/shadcn/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/shadcn/components/ui/dropdown-menu';
-import { type Theme, useTheme } from '@/components/theme-provider';
-
-const themeOptions: { label: string; value: Theme }[] = [
-  { label: 'Light', value: 'light' },
-  { label: 'Dark', value: 'dark' },
-  { label: 'System', value: 'system' },
-];
+import { useTheme } from '@/components/theme-provider';
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    const nextTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+    setTheme(nextTheme);
+  };
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className="relative size-10 rounded-full bg-transparent"
-          aria-label="Choose color theme"
-        >
-          <SunIcon aria-hidden="true" className="size-4 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
-          <MoonIcon aria-hidden="true" className="absolute size-4 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {themeOptions.map((option) => (
-          <DropdownMenuItem
-            key={option.value}
-            onClick={() => setTheme(option.value)}
-            aria-current={theme === option.value ? 'true' : undefined}
-          >
-            {option.label}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Button
+      type="button"
+      variant="outline"
+      size="icon"
+      onClick={toggleTheme}
+      className="relative size-10 rounded-full bg-transparent hover:bg-transparent dark:hover:bg-transparent"
+      aria-label="Toggle color theme"
+    >
+      <SunIcon aria-hidden="true" className="size-4 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
+      <MoonIcon aria-hidden="true" className="absolute size-4 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
+    </Button>
   );
 }
