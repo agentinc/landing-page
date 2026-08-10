@@ -771,7 +771,7 @@ function TeamsPricingCard({
 
   return (
     <article
-      className={`flex min-h-full flex-col rounded-2xl bg-background p-6 sm:p-7 ${isRecommended ? 'border-2 border-brand' : 'border border-brand/25'}`}
+      className={`flex min-h-full flex-col rounded-2xl border border-brand/25 bg-background p-6 sm:p-7 ${isRecommended ? 'ring-1 ring-brand ring-inset' : ''}`}
     >
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -834,17 +834,12 @@ function DeveloperPricingCard({
         <h3 className="mt-2 text-2xl font-semibold tracking-tight">{developerPlan.name}</h3>
       </div>
       <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-        Publish agents, tools, and connectors to the Agentinc marketplace.
+        For developers who want to create, publish, and sell agents through the Agentinc marketplace.
       </p>
 
       <div className="mt-16">
         <PlanPrice plan={developerPlan} billing={billing} />
       </div>
-
-      <dl className="my-7 divide-y divide-border border-y border-border">
-        <PricingFact label="Agents" value="0 agents" />
-        <ApiKeyFact startingCredits={developerPlan.startingCredits} />
-      </dl>
 
       <Button
         type="button"
@@ -884,10 +879,6 @@ function EnterprisePricingCard({
           We will shape a plan around your teams and operating needs.
         </p>
       </div>
-
-      <dl className="my-7 border-y border-border">
-        <ApiKeyFact />
-      </dl>
 
       <Button
         type="button"
@@ -982,7 +973,7 @@ function PricingFact({
   );
 }
 
-function ApiKeyFact({ startingCredits }: { startingCredits?: number }) {
+function ApiKeyFact({ startingCredits }: { startingCredits: number }) {
   const requirement = getApiKeyRequirement(startingCredits);
   const tooltipId = useId();
 
@@ -1014,11 +1005,7 @@ function ApiKeyFact({ startingCredits }: { startingCredits?: number }) {
   );
 }
 
-function getApiKeyRequirement(startingCredits?: number) {
-  if (startingCredits === undefined) {
-    return 'If an API key is needed, the minimum Starting Credits will be included in your quotation.';
-  }
-
+function getApiKeyRequirement(startingCredits: number) {
   if (startingCredits === 0) {
     return 'If an API key is needed, no minimum Starting Credits are required.';
   }
