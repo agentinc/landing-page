@@ -144,7 +144,7 @@ const inactiveSwitchButtonClass = 'text-muted-foreground';
 function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState('');
-  const [selectedBilling, setSelectedBilling] = useState<BillingInterval>('monthly');
+  const [selectedBilling, setSelectedBilling] = useState<BillingInterval>('annual');
 
   const scrollTo = (target: string) => {
     document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' });
@@ -371,11 +371,11 @@ function AgentWorkspacePreview() {
             ))}
           </div>
 
-          <div className="mt-6 rounded-xl border border-primary bg-primary p-5 text-primary-foreground">
+          <div className="mt-6 rounded-xl border border-border bg-muted p-5 text-foreground">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <div className="text-sm font-semibold">Your agent team</div>
-                <div className="mt-1 text-xs text-primary-foreground/65">
+                <div className="mt-1 text-xs text-muted-foreground">
                   Connected and ready to work
                 </div>
               </div>
@@ -383,7 +383,7 @@ function AgentWorkspacePreview() {
                 {['EN', 'CS', 'FI', 'OP'].map((agent) => (
                   <span
                     key={agent}
-                    className="flex size-9 items-center justify-center rounded-full border-2 border-primary bg-primary-foreground text-[9px] font-semibold text-primary"
+                    className="flex size-9 items-center justify-center rounded-full border-2 border-muted bg-background text-[9px] font-semibold text-foreground"
                   >
                     {agent}
                   </span>
@@ -469,37 +469,37 @@ function AgentTeamSection() {
   ];
 
   return (
-    <section className="bg-footer px-5 py-24 text-footer-foreground sm:px-8 sm:py-32">
+    <section className="border-y border-border bg-muted px-5 py-24 text-foreground sm:px-8 sm:py-32">
       <div className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
         <div>
-          <p className="text-sm font-medium text-footer-foreground/60">Agent teams</p>
+          <p className="text-sm font-medium text-brand">Agent teams</p>
           <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
             One goal. A team of specialized agents.
           </h2>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-footer-foreground/65">
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
             Give each agent a clear role, connect the handoffs, and keep human review where your business needs it.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-footer-foreground/20">
-          <div className="flex items-center justify-between border-b border-footer-foreground/15 px-5 py-4">
+        <div className="rounded-2xl border border-border bg-background">
+          <div className="flex items-center justify-between border-b border-border px-5 py-4">
             <span className="text-sm font-medium">Quarterly planning team</span>
-            <span className="rounded-full border border-footer-foreground/20 px-2.5 py-1 text-[10px] text-footer-foreground/60">
+            <span className="rounded-full border border-border px-2.5 py-1 text-[10px] text-muted-foreground">
               3 agents
             </span>
           </div>
-          <div className="divide-y divide-footer-foreground/15 px-5 sm:px-7">
+          <div className="divide-y divide-border px-5 sm:px-7">
             {workflow.map(([agent, task], index) => (
               <div key={agent} className="grid gap-3 py-5 sm:grid-cols-[2rem_0.8fr_1.2fr] sm:items-center sm:gap-5">
-                <span className="flex size-8 items-center justify-center rounded-full border border-footer-foreground/20 text-xs">
+                <span className="flex size-8 items-center justify-center rounded-full border border-border text-xs">
                   {index + 1}
                 </span>
                 <span className="font-medium">{agent}</span>
-                <span className="text-sm text-footer-foreground/60">{task}</span>
+                <span className="text-sm text-muted-foreground">{task}</span>
               </div>
             ))}
           </div>
-          <div className="flex items-center gap-3 border-t border-footer-foreground/15 px-5 py-4 text-sm text-footer-foreground/65 sm:px-7">
+          <div className="flex items-center gap-3 border-t border-border px-5 py-4 text-sm text-muted-foreground sm:px-7">
             <CheckIcon aria-hidden="true" className="size-4 text-brand" weight="bold" />
             Final review stays with your team
           </div>
@@ -695,7 +695,7 @@ function PricingSection({
 }: {
   onSelectPlan: (planId: string, billing: BillingInterval) => void;
 }) {
-  const [billing, setBilling] = useState<BillingInterval>('monthly');
+  const [billing, setBilling] = useState<BillingInterval>('annual');
   const [selectedPlanIds, setSelectedPlanIds] = useState<Record<PricingFamily, string>>(
     () => ({
       explorer: pricingFamilyDetails.explorer.defaultPlanId,
@@ -721,6 +721,16 @@ function PricingSection({
             const plans = pricingPlansByFamily[family];
             const selectedPlan =
               plans.find((plan) => plan.id === selectedPlanIds[family]) ?? plans[0];
+
+            if (family === 'enterprise') {
+              return (
+                <EnterprisePricingCard
+                  key={family}
+                  billing={billing}
+                  onSelectPlan={onSelectPlan}
+                />
+              );
+            }
 
             return (
               <PricingFamilyCard
@@ -825,15 +835,24 @@ function PricingFamilyCard({
 }) {
   const details = pricingFamilyDetails[family];
   const appliedBilling = selectedPlan.monthlyPrice === 0 ? 'monthly' : billing;
+  const isRecommended = selectedPlan.id === 'pro';
 
   return (
-    <article className="flex min-h-full flex-col rounded-2xl border border-brand/25 bg-background p-6 sm:p-7">
+    <article
+      className={`flex min-h-full flex-col rounded-2xl bg-background p-6 sm:p-7 ${isRecommended ? 'border-2 border-brand' : 'border border-brand/25'}`}
+    >
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm font-medium text-brand">{details.label}</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">{selectedPlan.name}</h3>
         </div>
-        <span className="mt-1 size-2 rounded-full bg-brand" aria-hidden="true" />
+        {isRecommended ? (
+          <span className="rounded-full border border-brand/30 px-2.5 py-1 text-[10px] font-medium text-brand">
+            Recommended
+          </span>
+        ) : (
+          <span className="mt-1 size-2 rounded-full bg-brand" aria-hidden="true" />
+        )}
       </div>
       <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
         {details.description}
@@ -857,7 +876,11 @@ function PricingFamilyCard({
           label="Agents"
           value={`${selectedPlan.agents} ${selectedPlan.agents === 1 ? 'agent' : 'agents'}`}
         />
-        <PricingFact label="Starting Credits" value={`$${selectedPlan.startingCredits}`} />
+        <PricingFact
+          label="Starting Credits"
+          description="API key included"
+          value={`$${selectedPlan.startingCredits}`}
+        />
       </dl>
 
       <Button
@@ -867,6 +890,54 @@ function PricingFamilyCard({
         className="mt-auto w-full rounded-full border-primary/30 bg-transparent text-primary"
       >
         Get early access
+        <ArrowRightIcon aria-hidden="true" />
+      </Button>
+    </article>
+  );
+}
+
+function EnterprisePricingCard({
+  billing,
+  onSelectPlan,
+}: {
+  billing: BillingInterval;
+  onSelectPlan: (planId: string, billing: BillingInterval) => void;
+}) {
+  return (
+    <article className="flex min-h-full flex-col rounded-2xl border border-brand/25 bg-background p-6 sm:p-7">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium text-brand">Enterprise</p>
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">Custom plan</h3>
+        </div>
+        <span className="mt-1 size-2 rounded-full bg-brand" aria-hidden="true" />
+      </div>
+      <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
+        Capacity, access, and support tailored to your organization.
+      </p>
+
+      <div className="mt-16">
+        <p className="text-2xl font-semibold tracking-tight">Contact us for a quotation</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          We will shape a plan around your teams and operating needs.
+        </p>
+      </div>
+
+      <dl className="my-7 border-y border-border">
+        <PricingFact
+          label="Starting Credits"
+          description="API key included"
+          value="Tailored"
+        />
+      </dl>
+
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => onSelectPlan('enterprise', billing)}
+        className="mt-auto w-full rounded-full border-primary/30 bg-transparent text-primary"
+      >
+        Contact Us
         <ArrowRightIcon aria-hidden="true" />
       </Button>
     </article>
@@ -901,7 +972,12 @@ function PlanSwitch({
             aria-pressed={isActive}
             className={`min-w-0 rounded-full px-2 py-2 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3 ${isActive ? activeSwitchButtonClass : inactiveSwitchButtonClass}`}
           >
-            {getShortPlanName(plan.name)}
+            <span className="inline-flex items-center justify-center gap-1.5">
+              {getShortPlanName(plan.name)}
+              {plan.id === 'pro' && (
+                <span className="size-1.5 rounded-full bg-brand" aria-label="Recommended" />
+              )}
+            </span>
           </button>
         );
       })}
@@ -913,7 +989,7 @@ function PlanPrice({ plan, billing }: { plan: PricingPlan; billing: BillingInter
   if (plan.monthlyPrice === 0) {
     return (
       <p className="flex items-end gap-2">
-        <span className="text-4xl font-semibold tracking-tight text-brand">$0</span>
+        <span className="text-4xl font-semibold tracking-tight text-brand">Free</span>
       </p>
     );
   }
@@ -948,10 +1024,23 @@ function PlanPrice({ plan, billing }: { plan: PricingPlan; billing: BillingInter
   );
 }
 
-function PricingFact({ label, value }: { label: string; value: string }) {
+function PricingFact({
+  label,
+  value,
+  description,
+}: {
+  label: string;
+  value: string;
+  description?: string;
+}) {
   return (
     <div className="flex items-center justify-between gap-4 py-4">
-      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dt>
+        <span className="block text-sm text-muted-foreground">{label}</span>
+        {description && (
+          <span className="mt-1 block text-xs text-muted-foreground">{description}</span>
+        )}
+      </dt>
       <dd className="text-right text-sm font-medium">{value}</dd>
     </div>
   );
