@@ -33,8 +33,6 @@ const navigation = [
   { label: 'Marketplace', target: 'marketplace' },
 ];
 
-const frameworks = ['OpenAI', 'Anthropic', 'LangChain', 'CrewAI', 'Custom Python'];
-
 const pricingFamilyOrder: PricingFamily[] = ['builder', 'team', 'enterprise'];
 const pricingFamilyDetails: Record<PricingFamily, { label: string; description: string }> = {
   builder: { label: 'Builder', description: 'Explore, build, and publish your first agents.' },
@@ -114,7 +112,6 @@ function LandingPage() {
 
       <main>
         <Hero onJoinBeta={() => scrollTo('beta')} onLearnMore={() => scrollTo('how-it-works')} />
-        <CompatibilityStrip />
         <HowItWorks />
         <ManagedPlatformPreview onJoinBeta={() => scrollTo('beta')} />
         <PlatformSection />
@@ -330,23 +327,6 @@ function FlowConnector({ label }: { label: string }) {
       <span className="h-6 w-px bg-brand/50" />
       {label}
     </div>
-  );
-}
-
-function CompatibilityStrip() {
-  return (
-    <section aria-label="Supported agent frameworks" className="border-y border-border px-5 sm:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-5 py-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="shrink-0 text-sm text-brand">Keep your framework</p>
-        <div className="flex flex-wrap gap-x-7 gap-y-3 sm:justify-end">
-          {frameworks.map((framework) => (
-            <span key={framework} className="text-sm font-medium text-foreground/80">
-              {framework}
-            </span>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 
