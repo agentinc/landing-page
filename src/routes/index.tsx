@@ -1,8 +1,7 @@
-import { type ReactNode, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { ArrowRightIcon } from '@phosphor-icons/react/dist/csr/ArrowRight';
 import { BriefcaseIcon } from '@phosphor-icons/react/dist/csr/Briefcase';
-import { BracketsCurlyIcon } from '@phosphor-icons/react/dist/csr/BracketsCurly';
 import { ChartLineUpIcon } from '@phosphor-icons/react/dist/csr/ChartLineUp';
 import { CheckIcon } from '@phosphor-icons/react/dist/csr/Check';
 import { CodeIcon } from '@phosphor-icons/react/dist/csr/Code';
@@ -18,7 +17,6 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react/dist/csr/MagnifyingGl
 import { MegaphoneIcon } from '@phosphor-icons/react/dist/csr/Megaphone';
 import { PlugsConnectedIcon } from '@phosphor-icons/react/dist/csr/PlugsConnected';
 import { ShieldCheckIcon } from '@phosphor-icons/react/dist/csr/ShieldCheck';
-import { StorefrontIcon } from '@phosphor-icons/react/dist/csr/Storefront';
 import { UsersFourIcon } from '@phosphor-icons/react/dist/csr/UsersFour';
 import { UsersThreeIcon } from '@phosphor-icons/react/dist/csr/UsersThree';
 import { WrenchIcon } from '@phosphor-icons/react/dist/csr/Wrench';
@@ -43,7 +41,6 @@ const navigation = [
   { label: 'How it works', target: 'how-it-works' },
   { label: 'Marketplace', target: 'marketplace' },
   { label: 'Pricing', target: 'pricing' },
-  { label: 'Developers', target: 'developers' },
 ];
 
 const businessFunctions = [
@@ -148,7 +145,7 @@ function LandingPage() {
       <main>
         <Hero
           onGetAccess={() => scrollTo('beta')}
-          onLearnMore={() => scrollTo('how-it-works')}
+          onExploreAgents={() => scrollTo('agents')}
         />
         <BusinessFunctionsSection />
         <HowItWorks />
@@ -156,7 +153,6 @@ function LandingPage() {
         <MarketplaceSection />
         <CustomizationSection />
         <ControlSection />
-        <DeveloperSection onGetAccess={() => selectPlan('developer', 'monthly')} />
         <PricingSection onSelectPlan={selectPlan} />
         <BetaSection selectedPlan={selectedPlan} selectedBilling={selectedBilling} />
       </main>
@@ -262,10 +258,10 @@ function Header({
 
 function Hero({
   onGetAccess,
-  onLearnMore,
+  onExploreAgents,
 }: {
   onGetAccess: () => void;
-  onLearnMore: () => void;
+  onExploreAgents: () => void;
 }) {
   return (
     <section
@@ -301,10 +297,10 @@ function Hero({
               size="lg"
               variant="outline"
               type="button"
-              onClick={onLearnMore}
+              onClick={onExploreAgents}
               className="h-12 rounded-full bg-transparent px-7 text-base"
             >
-              See how it works
+              Explore agents
             </Button>
           </div>
         </div>
@@ -370,7 +366,7 @@ function AgentWorkspacePreview() {
                   <span
                     key={label}
                     title={label}
-                    className={`flex size-9 items-center justify-center rounded-full border-2 border-brand bg-background ${color}`}
+                    className={`flex size-9 items-center justify-center rounded-full border border-brand/35 bg-background ${color}`}
                   >
                     <Icon aria-hidden="true" className="size-4" weight="bold" />
                   </span>
@@ -492,7 +488,7 @@ function AgentTeamSection() {
           <div className="divide-y divide-border px-5 sm:px-7">
             {workflow.map(({ agent, task, icon: Icon, color }) => (
               <div key={agent} className="grid gap-3 py-5 sm:grid-cols-[2rem_0.8fr_1.2fr] sm:items-center sm:gap-5">
-                <span className={`flex size-8 items-center justify-center rounded-full border border-brand ${color}`}>
+                <span className={`flex size-8 items-center justify-center rounded-full border border-brand/35 ${color}`}>
                   <Icon aria-hidden="true" className="size-4" weight="bold" />
                 </span>
                 <span className="font-medium">{agent}</span>
@@ -521,12 +517,7 @@ function MarketplaceSection() {
     <section id="marketplace" className="border-b border-border bg-card px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-24">
         <div>
-          <div className="flex items-center gap-3 text-base font-semibold text-brand">
-            <span className="flex size-11 items-center justify-center rounded-full border border-brand/25">
-              <StorefrontIcon aria-hidden="true" className="size-5" />
-            </span>
-            Agent marketplace
-          </div>
+          <p className="text-base font-semibold text-brand">Marketplace</p>
           <h2 className="mt-7 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
             Find what your business needs next.
           </h2>
@@ -543,8 +534,8 @@ function MarketplaceSection() {
           <div className="divide-y divide-border px-5 sm:px-7">
             {listings.map(([category, name]) => (
               <div key={name} className="grid gap-2 py-5 sm:grid-cols-[0.75fr_1.25fr_auto] sm:items-center sm:gap-5">
-                <span className="text-xs font-medium text-brand">{category}</span>
-                <span className="text-base font-semibold sm:text-lg">{name}</span>
+                <span className="text-base font-semibold text-brand">{category}</span>
+                <span className="text-base font-medium">{name}</span>
                 <span className="text-xs text-muted-foreground">View agent</span>
               </div>
             ))}
@@ -646,54 +637,6 @@ function ControlSection() {
   );
 }
 
-function DeveloperSection({ onGetAccess }: { onGetAccess: () => void }) {
-  return (
-    <section id="developers" className="px-5 py-24 sm:px-8 sm:py-32">
-      <div className="mx-auto max-w-7xl rounded-2xl border border-border bg-muted/40 p-6 sm:p-10 lg:p-14">
-        <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:gap-20">
-          <div>
-            <div className="flex items-center gap-3 text-base font-semibold text-brand">
-              <BracketsCurlyIcon aria-hidden="true" className="size-5" />
-              For developers
-            </div>
-            <h2 className="mt-5 max-w-3xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
-              Extend Agentinc for the way your business builds.
-            </h2>
-            <p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground">
-              Bring existing agents, work with your preferred frameworks, create tools and connectors, and publish to the Agentinc marketplace.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm text-muted-foreground">
-              {['Existing frameworks', 'Custom tools', 'Marketplace publishing'].map((item) => (
-                <span key={item} className="flex items-center gap-2">
-                  <CheckIcon aria-hidden="true" className="size-3.5 text-brand" weight="bold" />
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="border-t border-border pt-7 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0">
-            <p className="text-sm font-medium">Developer Plan</p>
-            <p className="mt-3 flex items-end gap-2">
-              <span className="text-4xl font-semibold tracking-tight text-brand">$5</span>
-              <span className="pb-1 text-sm text-muted-foreground">/ month</span>
-            </p>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onGetAccess}
-              className="mt-6 w-full rounded-full bg-transparent sm:w-auto"
-            >
-              Get developer access
-              <ArrowRightIcon aria-hidden="true" />
-            </Button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function PricingSection({
   onSelectPlan,
 }: {
@@ -765,14 +708,8 @@ function BillingSwitch({
         onBillingChange={onBillingChange}
       />
       <BillingButton
-        label={(
-          <span className="inline-flex items-center gap-2">
-            Annual
-            <span className="rounded-full border border-brand/30 px-1.5 py-0.5 text-[10px] text-brand">
-              -17%
-            </span>
-          </span>
-        )}
+        label="Annual"
+        badge="-17%"
         interval="annual"
         activeBilling={billing}
         onBillingChange={onBillingChange}
@@ -783,11 +720,13 @@ function BillingSwitch({
 
 function BillingButton({
   label,
+  badge,
   interval,
   activeBilling,
   onBillingChange,
 }: {
-  label: ReactNode;
+  label: string;
+  badge?: string;
   interval: BillingInterval;
   activeBilling: BillingInterval;
   onBillingChange: (billing: BillingInterval) => void;
@@ -801,7 +740,16 @@ function BillingButton({
       aria-pressed={isActive}
       className={`flex-1 rounded-full px-6 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:flex-none ${isActive ? activeSwitchButtonClass : inactiveSwitchButtonClass}`}
     >
-      {label}
+      <span className="inline-flex items-center gap-2">
+        {label}
+        {badge && (
+          <span
+            className={`rounded-full border px-1.5 py-0.5 text-[10px] ${isActive ? 'border-primary-foreground/35 text-primary-foreground' : 'border-brand/30 text-brand'}`}
+          >
+            {badge}
+          </span>
+        )}
+      </span>
     </button>
   );
 }
@@ -862,9 +810,8 @@ function TeamsPricingCard({
 
       <Button
         type="button"
-        variant="outline"
         onClick={() => onSelectPlan(selectedPlan.id, billing)}
-        className="mt-auto w-full rounded-full border-primary/30 bg-transparent text-primary"
+        className="mt-auto w-full rounded-full bg-brand text-brand-foreground hover:bg-brand hover:text-brand-foreground"
       >
         Start for free
         <ArrowRightIcon aria-hidden="true" />
@@ -1098,8 +1045,9 @@ function BetaSection({
     <section id="beta" className="relative px-5 py-24 sm:px-8 sm:py-32">
       <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-brand/35 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-brand">
-            Private beta access
+          <div className="inline-flex items-center gap-2 rounded-full border border-brand/35 bg-background px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-brand">
+            <span className="size-1.5 rounded-full bg-brand" aria-hidden="true" />
+            Private Beta
           </div>
           <h2 className="mt-7 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
             Start building your AI team.
