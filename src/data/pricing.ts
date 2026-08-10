@@ -13,15 +13,17 @@ export interface PricingPlan {
   family: PricingAudience;
 }
 
+export const developerPlan: PricingPlan = {
+  id: 'developer', name: 'Developer Plan', monthlyPrice: 5, agents: 0,
+  durationDays: 30, marketplace: true, startingCredits: 0, family: 'developer',
+};
+
 export const pricingPlans: PricingPlan[] = [
   {
     id: 'free-trial', name: 'Free Trial', monthlyPrice: 0, agents: 1,
     durationDays: 14, marketplace: false, startingCredits: 0, family: 'explorer',
   },
-  {
-    id: 'developer', name: 'Developer Plan', monthlyPrice: 5, agents: 0,
-    durationDays: 30, marketplace: true, startingCredits: 0, family: 'developer',
-  },
+  developerPlan,
   {
     id: 'starter', name: 'Starter Plan', monthlyPrice: 25, agents: 5,
     durationDays: 30, marketplace: true, startingCredits: 25, family: 'business',

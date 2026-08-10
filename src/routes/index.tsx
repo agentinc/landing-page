@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { type ReactNode, useId, useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { ArrowRightIcon } from '@phosphor-icons/react/dist/csr/ArrowRight';
 import { BriefcaseIcon } from '@phosphor-icons/react/dist/csr/Briefcase';
@@ -10,6 +10,7 @@ import { CurrencyDollarIcon } from '@phosphor-icons/react/dist/csr/CurrencyDolla
 import { EyeIcon } from '@phosphor-icons/react/dist/csr/Eye';
 import { GearSixIcon } from '@phosphor-icons/react/dist/csr/GearSix';
 import { HeadsetIcon } from '@phosphor-icons/react/dist/csr/Headset';
+import { InfoIcon } from '@phosphor-icons/react/dist/csr/Info';
 import { LinkIcon } from '@phosphor-icons/react/dist/csr/Link';
 import { ListIcon } from '@phosphor-icons/react/dist/csr/List';
 import { LockKeyIcon } from '@phosphor-icons/react/dist/csr/LockKey';
@@ -27,8 +28,8 @@ import { ContactUs } from '../components/contact-us';
 import { ThemeToggle } from '../components/theme-toggle';
 import {
   type BillingInterval,
-  type PricingFamily,
   type PricingPlan,
+  developerPlan,
   pricingPlansByFamily,
 } from '../data/pricing';
 import Logo from '../components/logo';
@@ -90,52 +91,31 @@ const businessFunctions = [
 
 const adoptionSteps = [
   {
-    number: '01',
     title: 'Find the right agents',
     description: 'Browse by business function, task, or goal to find specialists suited to the work.',
     icon: MagnifyingGlassIcon,
   },
   {
-    number: '02',
     title: 'Connect your business',
     description: 'Choose the tools and information each agent needs to work with your team.',
     icon: PlugsConnectedIcon,
   },
   {
-    number: '03',
     title: 'Make them yours',
     description: 'Agentinc helps tailor responsibilities, knowledge, access, and approval rules.',
     icon: WrenchIcon,
   },
   {
-    number: '04',
     title: 'Assemble your team',
     description: 'Bring specialists together in one workspace and start putting them to work.',
     icon: UsersThreeIcon,
   },
 ];
 
-const pricingFamilyOrder: PricingFamily[] = ['explorer', 'business', 'enterprise'];
-
-const pricingFamilyDetails: Record<
-  PricingFamily,
-  { label: string; description: string; defaultPlanId: string }
-> = {
-  explorer: {
-    label: 'Explorer',
-    description: 'Start with one agent and see how Agentinc fits your business.',
-    defaultPlanId: 'free-trial',
-  },
-  business: {
-    label: 'Business',
-    description: 'Choose the right capacity for a growing team of agents.',
-    defaultPlanId: 'pro',
-  },
-  enterprise: {
-    label: 'Enterprise',
-    description: 'Expand agent capacity across departments and business units.',
-    defaultPlanId: 'enterprise',
-  },
+const teamsPricingDetails = {
+  label: 'Teams',
+  description: 'Choose the right capacity for a growing team of agents.',
+  defaultPlanId: 'pro',
 };
 
 const activeSwitchButtonClass = 'bg-primary text-primary-foreground';
@@ -341,6 +321,12 @@ function AgentWorkspacePreview() {
     { label: 'Connect your tools', detail: 'Choose data and access', icon: LinkIcon },
     { label: 'Assemble a team', detail: 'Set roles and handoffs', icon: UsersThreeIcon },
   ];
+  const selectedAgents = [
+    { label: 'Engineering agent', icon: CodeIcon, color: 'text-agent-1' },
+    { label: 'Customer service agent', icon: HeadsetIcon, color: 'text-agent-2' },
+    { label: 'Finance agent', icon: CurrencyDollarIcon, color: 'text-agent-3' },
+    { label: 'Operations agent', icon: GearSixIcon, color: 'text-agent-4' },
+  ];
 
   return (
     <figure className="relative mx-auto w-full max-w-xl" aria-label="Building an AI agent team with Agentinc">
@@ -380,12 +366,13 @@ function AgentWorkspacePreview() {
                 </div>
               </div>
               <div className="flex -space-x-2" aria-label="Four agents selected">
-                {['EN', 'CS', 'FI', 'OP'].map((agent) => (
+                {selectedAgents.map(({ label, icon: Icon, color }) => (
                   <span
-                    key={agent}
-                    className="flex size-9 items-center justify-center rounded-full border-2 border-muted bg-background text-[9px] font-semibold text-foreground"
+                    key={label}
+                    title={label}
+                    className={`flex size-9 items-center justify-center rounded-full border-2 border-brand bg-background ${color}`}
                   >
-                    {agent}
+                    <Icon aria-hidden="true" className="size-4" weight="bold" />
                   </span>
                 ))}
               </div>
@@ -403,7 +390,7 @@ function BusinessFunctionsSection() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
           <div>
-            <p className="text-sm font-medium text-brand">Agents for your business</p>
+            <p className="text-base font-semibold text-brand">Agents for your business</p>
             <h2 className="mt-4 max-w-lg text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
               Specialized help across your entire business.
             </h2>
@@ -437,19 +424,18 @@ function HowItWorks() {
     <section id="how-it-works" className="px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-3xl">
-          <p className="text-sm font-medium text-brand">How it works</p>
+          <p className="text-base font-semibold text-brand">How it works</p>
           <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
             From a business need to a working agent team.
           </h2>
         </div>
 
         <div className="mt-16 border-t border-border">
-          {adoptionSteps.map(({ number, title, description, icon: Icon }) => (
+          {adoptionSteps.map(({ title, description, icon: Icon }) => (
             <article
-              key={number}
-              className="grid gap-4 border-b border-border py-8 sm:grid-cols-[3rem_auto_0.8fr_1.2fr] sm:items-start sm:gap-7 sm:py-10"
+              key={title}
+              className="grid gap-4 border-b border-border py-8 sm:grid-cols-[auto_0.8fr_1.2fr] sm:items-start sm:gap-7 sm:py-10"
             >
-              <span className="text-xs text-brand">{number}</span>
               <Icon aria-hidden="true" className="size-5 text-brand" />
               <h3 className="text-xl font-semibold leading-snug">{title}</h3>
               <p className="max-w-xl leading-relaxed text-muted-foreground">{description}</p>
@@ -463,16 +449,31 @@ function HowItWorks() {
 
 function AgentTeamSection() {
   const workflow = [
-    ['Research agent', 'Collects and organizes the information'],
-    ['Operations agent', 'Turns findings into an actionable plan'],
-    ['Communication agent', 'Prepares the team-ready output'],
+    {
+      agent: 'Research agent',
+      task: 'Collects and organizes the information',
+      icon: MagnifyingGlassIcon,
+      color: 'text-agent-1',
+    },
+    {
+      agent: 'Operations agent',
+      task: 'Turns findings into an actionable plan',
+      icon: GearSixIcon,
+      color: 'text-agent-2',
+    },
+    {
+      agent: 'Communication agent',
+      task: 'Prepares the team-ready output',
+      icon: MegaphoneIcon,
+      color: 'text-agent-3',
+    },
   ];
 
   return (
     <section className="border-y border-border bg-muted px-5 py-24 text-foreground sm:px-8 sm:py-32">
       <div className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
         <div>
-          <p className="text-sm font-medium text-brand">Agent teams</p>
+          <p className="text-base font-semibold text-brand">Agent teams</p>
           <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
             One goal. A team of specialized agents.
           </h2>
@@ -489,10 +490,10 @@ function AgentTeamSection() {
             </span>
           </div>
           <div className="divide-y divide-border px-5 sm:px-7">
-            {workflow.map(([agent, task], index) => (
+            {workflow.map(({ agent, task, icon: Icon, color }) => (
               <div key={agent} className="grid gap-3 py-5 sm:grid-cols-[2rem_0.8fr_1.2fr] sm:items-center sm:gap-5">
-                <span className="flex size-8 items-center justify-center rounded-full border border-border text-xs">
-                  {index + 1}
+                <span className={`flex size-8 items-center justify-center rounded-full border border-brand ${color}`}>
+                  <Icon aria-hidden="true" className="size-4" weight="bold" />
                 </span>
                 <span className="font-medium">{agent}</span>
                 <span className="text-sm text-muted-foreground">{task}</span>
@@ -520,8 +521,11 @@ function MarketplaceSection() {
     <section id="marketplace" className="border-b border-border bg-card px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-24">
         <div>
-          <div className="flex size-11 items-center justify-center rounded-full border border-brand/25 text-brand">
-            <StorefrontIcon aria-hidden="true" className="size-5" />
+          <div className="flex items-center gap-3 text-base font-semibold text-brand">
+            <span className="flex size-11 items-center justify-center rounded-full border border-brand/25">
+              <StorefrontIcon aria-hidden="true" className="size-5" />
+            </span>
+            Agent marketplace
           </div>
           <h2 className="mt-7 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
             Find what your business needs next.
@@ -540,7 +544,7 @@ function MarketplaceSection() {
             {listings.map(([category, name]) => (
               <div key={name} className="grid gap-2 py-5 sm:grid-cols-[0.75fr_1.25fr_auto] sm:items-center sm:gap-5">
                 <span className="text-xs font-medium text-brand">{category}</span>
-                <span className="text-sm font-medium">{name}</span>
+                <span className="text-base font-semibold sm:text-lg">{name}</span>
                 <span className="text-xs text-muted-foreground">View agent</span>
               </div>
             ))}
@@ -590,7 +594,7 @@ function CustomizationSection() {
         </div>
 
         <div className="order-1 lg:order-2">
-          <p className="text-sm font-medium text-brand">Customized for you</p>
+          <p className="text-base font-semibold text-brand">Customized for you</p>
           <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
             Built around the way your company works.
           </h2>
@@ -616,7 +620,7 @@ function ControlSection() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
           <div>
-            <p className="text-sm font-medium text-brand">Confidence and control</p>
+            <p className="text-base font-semibold text-brand">Confidence and control</p>
             <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
               Stay in control as your agent team grows.
             </h2>
@@ -648,7 +652,7 @@ function DeveloperSection({ onGetAccess }: { onGetAccess: () => void }) {
       <div className="mx-auto max-w-7xl rounded-2xl border border-border bg-muted/40 p-6 sm:p-10 lg:p-14">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:gap-20">
           <div>
-            <div className="flex items-center gap-3 text-sm font-medium text-brand">
+            <div className="flex items-center gap-3 text-base font-semibold text-brand">
               <BracketsCurlyIcon aria-hidden="true" className="size-5" />
               For developers
             </div>
@@ -696,17 +700,12 @@ function PricingSection({
   onSelectPlan: (planId: string, billing: BillingInterval) => void;
 }) {
   const [billing, setBilling] = useState<BillingInterval>('annual');
-  const [selectedPlanIds, setSelectedPlanIds] = useState<Record<PricingFamily, string>>(
-    () => ({
-      explorer: pricingFamilyDetails.explorer.defaultPlanId,
-      business: pricingFamilyDetails.business.defaultPlanId,
-      enterprise: pricingFamilyDetails.enterprise.defaultPlanId,
-    }),
+  const [selectedTeamsPlanId, setSelectedTeamsPlanId] = useState(
+    teamsPricingDetails.defaultPlanId,
   );
-
-  const selectFamilyPlan = (family: PricingFamily, planId: string) => {
-    setSelectedPlanIds((current) => ({ ...current, [family]: planId }));
-  };
+  const teamsPlans = pricingPlansByFamily.business;
+  const selectedTeamsPlan =
+    teamsPlans.find((plan) => plan.id === selectedTeamsPlanId) ?? teamsPlans[0];
 
   return (
     <section id="pricing" className="border-y border-border bg-card px-5 py-24 sm:px-8 sm:py-32">
@@ -717,33 +716,15 @@ function PricingSection({
         </div>
 
         <div className="mt-12 grid items-stretch gap-5 lg:grid-cols-3">
-          {pricingFamilyOrder.map((family) => {
-            const plans = pricingPlansByFamily[family];
-            const selectedPlan =
-              plans.find((plan) => plan.id === selectedPlanIds[family]) ?? plans[0];
-
-            if (family === 'enterprise') {
-              return (
-                <EnterprisePricingCard
-                  key={family}
-                  billing={billing}
-                  onSelectPlan={onSelectPlan}
-                />
-              );
-            }
-
-            return (
-              <PricingFamilyCard
-                key={family}
-                family={family}
-                plans={plans}
-                selectedPlan={selectedPlan}
-                billing={billing}
-                onPlanChange={(planId) => selectFamilyPlan(family, planId)}
-                onSelectPlan={onSelectPlan}
-              />
-            );
-          })}
+          <DeveloperPricingCard billing={billing} onSelectPlan={onSelectPlan} />
+          <TeamsPricingCard
+            plans={teamsPlans}
+            selectedPlan={selectedTeamsPlan}
+            billing={billing}
+            onPlanChange={setSelectedTeamsPlanId}
+            onSelectPlan={onSelectPlan}
+          />
+          <EnterprisePricingCard billing={billing} onSelectPlan={onSelectPlan} />
         </div>
       </div>
     </section>
@@ -753,7 +734,7 @@ function PricingSection({
 function PricingHeader() {
   return (
     <div className="mx-auto max-w-3xl text-center">
-      <p className="text-sm font-medium text-brand">Pricing</p>
+      <p className="text-base font-semibold text-brand">Pricing</p>
       <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
         Start with one agent. Grow into a team.
       </h2>
@@ -784,7 +765,14 @@ function BillingSwitch({
         onBillingChange={onBillingChange}
       />
       <BillingButton
-        label="Annual"
+        label={(
+          <span className="inline-flex items-center gap-2">
+            Annual
+            <span className="rounded-full border border-brand/30 px-1.5 py-0.5 text-[10px] text-brand">
+              -17%
+            </span>
+          </span>
+        )}
         interval="annual"
         activeBilling={billing}
         onBillingChange={onBillingChange}
@@ -799,7 +787,7 @@ function BillingButton({
   activeBilling,
   onBillingChange,
 }: {
-  label: string;
+  label: ReactNode;
   interval: BillingInterval;
   activeBilling: BillingInterval;
   onBillingChange: (billing: BillingInterval) => void;
@@ -818,23 +806,19 @@ function BillingButton({
   );
 }
 
-function PricingFamilyCard({
-  family,
+function TeamsPricingCard({
   plans,
   selectedPlan,
   billing,
   onPlanChange,
   onSelectPlan,
 }: {
-  family: PricingFamily;
   plans: PricingPlan[];
   selectedPlan: PricingPlan;
   billing: BillingInterval;
   onPlanChange: (planId: string) => void;
   onSelectPlan: (planId: string, billing: BillingInterval) => void;
 }) {
-  const details = pricingFamilyDetails[family];
-  const appliedBilling = selectedPlan.monthlyPrice === 0 ? 'monthly' : billing;
   const isRecommended = selectedPlan.id === 'pro';
 
   return (
@@ -843,24 +827,21 @@ function PricingFamilyCard({
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-brand">{details.label}</p>
+          <p className="text-sm font-medium text-brand">{teamsPricingDetails.label}</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">{selectedPlan.name}</h3>
         </div>
-        {isRecommended ? (
+        {isRecommended && (
           <span className="rounded-full border border-brand/30 px-2.5 py-1 text-[10px] font-medium text-brand">
             Recommended
           </span>
-        ) : (
-          <span className="mt-1 size-2 rounded-full bg-brand" aria-hidden="true" />
         )}
       </div>
       <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-        {details.description}
+        {teamsPricingDetails.description}
       </p>
 
       {plans.length > 1 && (
         <PlanSwitch
-          family={family}
           plans={plans}
           selectedPlanId={selectedPlan.id}
           onPlanChange={onPlanChange}
@@ -868,7 +849,7 @@ function PricingFamilyCard({
       )}
 
       <div className={plans.length > 1 ? 'mt-7' : 'mt-16'}>
-        <PlanPrice plan={selectedPlan} billing={appliedBilling} />
+        <PlanPrice plan={selectedPlan} billing={billing} />
       </div>
 
       <dl className="my-7 divide-y divide-border border-y border-border">
@@ -876,20 +857,55 @@ function PricingFamilyCard({
           label="Agents"
           value={`${selectedPlan.agents} ${selectedPlan.agents === 1 ? 'agent' : 'agents'}`}
         />
-        <PricingFact
-          label="Starting Credits"
-          description="API key included"
-          value={`$${selectedPlan.startingCredits}`}
-        />
+        <ApiKeyFact startingCredits={selectedPlan.startingCredits} />
       </dl>
 
       <Button
         type="button"
         variant="outline"
-        onClick={() => onSelectPlan(selectedPlan.id, appliedBilling)}
+        onClick={() => onSelectPlan(selectedPlan.id, billing)}
         className="mt-auto w-full rounded-full border-primary/30 bg-transparent text-primary"
       >
-        Get early access
+        Start for free
+        <ArrowRightIcon aria-hidden="true" />
+      </Button>
+    </article>
+  );
+}
+
+function DeveloperPricingCard({
+  billing,
+  onSelectPlan,
+}: {
+  billing: BillingInterval;
+  onSelectPlan: (planId: string, billing: BillingInterval) => void;
+}) {
+  return (
+    <article className="flex min-h-full flex-col rounded-2xl border border-brand/25 bg-background p-6 sm:p-7">
+      <div>
+        <p className="text-sm font-medium text-brand">Developer</p>
+        <h3 className="mt-2 text-2xl font-semibold tracking-tight">{developerPlan.name}</h3>
+      </div>
+      <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
+        Publish agents, tools, and connectors to the Agentinc marketplace.
+      </p>
+
+      <div className="mt-16">
+        <PlanPrice plan={developerPlan} billing={billing} />
+      </div>
+
+      <dl className="my-7 divide-y divide-border border-y border-border">
+        <PricingFact label="Agents" value="0 agents" />
+        <ApiKeyFact startingCredits={developerPlan.startingCredits} />
+      </dl>
+
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => onSelectPlan(developerPlan.id, billing)}
+        className="mt-auto w-full rounded-full border-primary/30 bg-transparent text-primary"
+      >
+        Get developer access
         <ArrowRightIcon aria-hidden="true" />
       </Button>
     </article>
@@ -910,7 +926,6 @@ function EnterprisePricingCard({
           <p className="text-sm font-medium text-brand">Enterprise</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">Custom plan</h3>
         </div>
-        <span className="mt-1 size-2 rounded-full bg-brand" aria-hidden="true" />
       </div>
       <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
         Capacity, access, and support tailored to your organization.
@@ -924,11 +939,7 @@ function EnterprisePricingCard({
       </div>
 
       <dl className="my-7 border-y border-border">
-        <PricingFact
-          label="Starting Credits"
-          description="API key included"
-          value="Tailored"
-        />
+        <ApiKeyFact />
       </dl>
 
       <Button
@@ -945,12 +956,10 @@ function EnterprisePricingCard({
 }
 
 function PlanSwitch({
-  family,
   plans,
   selectedPlanId,
   onPlanChange,
 }: {
-  family: PricingFamily;
   plans: PricingPlan[];
   selectedPlanId: string;
   onPlanChange: (planId: string) => void;
@@ -959,7 +968,7 @@ function PlanSwitch({
     <div
       className="mt-6 grid grid-cols-3 rounded-full border border-border bg-muted p-1"
       role="group"
-      aria-label={`${pricingFamilyDetails[family].label} plan`}
+      aria-label="Teams plan"
     >
       {plans.map((plan) => {
         const isActive = plan.id === selectedPlanId;
@@ -972,12 +981,7 @@ function PlanSwitch({
             aria-pressed={isActive}
             className={`min-w-0 rounded-full px-2 py-2 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-3 ${isActive ? activeSwitchButtonClass : inactiveSwitchButtonClass}`}
           >
-            <span className="inline-flex items-center justify-center gap-1.5">
-              {getShortPlanName(plan.name)}
-              {plan.id === 'pro' && (
-                <span className="size-1.5 rounded-full bg-brand" aria-label="Recommended" />
-              )}
-            </span>
+            {getShortPlanName(plan.name)}
           </button>
         );
       })}
@@ -986,14 +990,6 @@ function PlanSwitch({
 }
 
 function PlanPrice({ plan, billing }: { plan: PricingPlan; billing: BillingInterval }) {
-  if (plan.monthlyPrice === 0) {
-    return (
-      <p className="flex items-end gap-2">
-        <span className="text-4xl font-semibold tracking-tight text-brand">Free</span>
-      </p>
-    );
-  }
-
   if (billing === 'monthly') {
     return (
       <p className="flex items-end gap-2">
@@ -1027,27 +1023,64 @@ function PlanPrice({ plan, billing }: { plan: PricingPlan; billing: BillingInter
 function PricingFact({
   label,
   value,
-  description,
 }: {
   label: string;
   value: string;
-  description?: string;
 }) {
   return (
     <div className="flex items-center justify-between gap-4 py-4">
-      <dt>
-        <span className="block text-sm text-muted-foreground">{label}</span>
-        {description && (
-          <span className="mt-1 block text-xs text-muted-foreground">{description}</span>
-        )}
-      </dt>
+      <dt className="text-sm text-muted-foreground">{label}</dt>
       <dd className="text-right text-sm font-medium">{value}</dd>
     </div>
   );
 }
 
+function ApiKeyFact({ startingCredits }: { startingCredits?: number }) {
+  const requirement = getApiKeyRequirement(startingCredits);
+  const tooltipId = useId();
+
+  return (
+    <div className="flex items-center justify-between gap-4 py-4">
+      <dt className="text-sm text-muted-foreground">API Key</dt>
+      <dd className="group relative flex items-center gap-2 text-sm font-medium">
+        <span className="flex size-6 items-center justify-center rounded-full border border-border text-muted-foreground">
+          <XIcon aria-hidden="true" className="size-3.5" weight="bold" />
+          <span className="sr-only">Not included by default</span>
+        </span>
+        <button
+          type="button"
+          aria-label="API key requirement"
+          aria-describedby={tooltipId}
+          className="flex size-6 items-center justify-center rounded-full text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <InfoIcon aria-hidden="true" className="size-4" />
+        </button>
+        <span
+          id={tooltipId}
+          role="tooltip"
+          className="invisible absolute right-0 bottom-full z-50 mb-2 w-64 rounded-lg bg-primary px-3 py-2 text-left text-xs leading-relaxed text-primary-foreground group-focus-within:visible group-hover:visible"
+        >
+          {requirement}
+        </span>
+      </dd>
+    </div>
+  );
+}
+
+function getApiKeyRequirement(startingCredits?: number) {
+  if (startingCredits === undefined) {
+    return 'If an API key is needed, the minimum Starting Credits will be included in your quotation.';
+  }
+
+  if (startingCredits === 0) {
+    return 'If an API key is needed, no minimum Starting Credits are required.';
+  }
+
+  return `If an API key is needed, a minimum of $${startingCredits} in Starting Credits needs to be included.`;
+}
+
 function getShortPlanName(planName: string) {
-  return planName.replace(' Plan', '').replace('Enterprise ', '');
+  return planName.replace(' Plan', '');
 }
 
 function formatPrice(price: number) {
