@@ -10,12 +10,12 @@ const accentOptions = [
   { value: 'dark-red', label: 'Dark red' },
 ] as const;
 
-const backgroundPatternOptions = [
+const heroPatternOptions = [
   { value: 'dots', label: 'Dots' },
   { value: 'lines', label: 'Lines' },
 ] as const;
 
-const backgroundPatternOpacity = {
+const heroPatternOpacity = {
   minimum: 20,
   maximum: 100,
   step: 5,
@@ -24,8 +24,8 @@ const backgroundPatternOpacity = {
 
 type AccentColor = (typeof accentOptions)[number]['value'];
 type AccentOption = (typeof accentOptions)[number];
-type BackgroundPattern = (typeof backgroundPatternOptions)[number]['value'];
-type BackgroundPatternOption = (typeof backgroundPatternOptions)[number];
+type HeroPattern = (typeof heroPatternOptions)[number]['value'];
+type HeroPatternOption = (typeof heroPatternOptions)[number];
 
 function isAccentColor(value: string | null): value is AccentColor {
   return accentOptions.some((option) => option.value === value);
@@ -36,21 +36,20 @@ function storedAccent(): AccentColor {
   return isAccentColor(stored) ? stored : 'blue';
 }
 
-function isBackgroundPattern(value: string | null): value is BackgroundPattern {
-  return backgroundPatternOptions.some((option) => option.value === value);
+function isHeroPattern(value: string | null): value is HeroPattern {
+  return heroPatternOptions.some((option) => option.value === value);
 }
 
-function storedBackgroundPattern(): BackgroundPattern {
-  const stored = localStorage.getItem('background-pattern-storage') ?? localStorage.getItem('hero-pattern-storage');
-  return isBackgroundPattern(stored) ? stored : 'lines';
+function storedHeroPattern(): HeroPattern {
+  const stored = localStorage.getItem('hero-pattern-storage');
+  return isHeroPattern(stored) ? stored : 'lines';
 }
 
-function storedBackgroundPatternOpacity(): number {
-  const storedValue = localStorage.getItem('background-pattern-opacity-storage') ?? localStorage.getItem('hero-pattern-opacity-storage');
-  const stored = Number(storedValue);
-  return Number.isFinite(stored) && stored >= backgroundPatternOpacity.minimum && stored <= backgroundPatternOpacity.maximum
+function storedHeroPatternOpacity(): number {
+  const stored = Number(localStorage.getItem('hero-pattern-opacity-storage'));
+  return Number.isFinite(stored) && stored >= heroPatternOpacity.minimum && stored <= heroPatternOpacity.maximum
     ? stored
-    : backgroundPatternOpacity.defaultValue;
+    : heroPatternOpacity.defaultValue;
 }
 
 function isDesignPickerEnabled() {
@@ -91,9 +90,9 @@ function PatternSwatch({
   isSelected,
   onSelect,
 }: {
-  option: BackgroundPatternOption;
+  option: HeroPatternOption;
   isSelected: boolean;
-  onSelect: (pattern: BackgroundPattern) => void;
+  onSelect: (pattern: HeroPattern) => void;
 }) {
   return (
     <button
@@ -101,7 +100,7 @@ function PatternSwatch({
       onClick={() => onSelect(option.value)}
       className="pattern-swatch flex size-10 items-center justify-center rounded-lg border border-border text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
       data-pattern-swatch={option.value}
-      aria-label={`Use ${option.label.toLowerCase()} in section backgrounds`}
+      aria-label={`Use ${option.label.toLowerCase()} in the hero background`}
       aria-pressed={isSelected}
       title={option.label}
     >
@@ -113,12 +112,12 @@ function PatternSwatch({
 export function DesignPicker() {
   const pickerEnabled = isDesignPickerEnabled();
   const [accent, setAccent] = useState<AccentColor>(storedAccent);
-  const [backgroundPattern, setBackgroundPattern] = useState<BackgroundPattern>(storedBackgroundPattern);
-  const [patternOpacity, setPatternOpacity] = useState<number>(storedBackgroundPatternOpacity);
+  const [heroPattern, setHeroPattern] = useState<HeroPattern>(storedHeroPattern);
+  const [patternOpacity, setPatternOpacity] = useState<number>(storedHeroPatternOpacity);
 
   useLayoutEffect(() => {
     if (!pickerEnabled) return;
-    document.documentElement.style.setProperty('--background-pattern-opacity', String(patternOpacity / 100));
+    document.documentElement.style.setProperty('--hero-pattern-opacity', String(patternOpacity / 100));
   }, [patternOpacity, pickerEnabled]);
 
   if (!pickerEnabled) return null;
@@ -129,14 +128,14 @@ export function DesignPicker() {
     setAccent(nextAccent);
   };
 
-  const selectBackgroundPattern = (nextPattern: BackgroundPattern) => {
-    document.documentElement.dataset.backgroundPattern = nextPattern;
-    localStorage.setItem('background-pattern-storage', nextPattern);
-    setBackgroundPattern(nextPattern);
+  const selectHeroPattern = (nextPattern: HeroPattern) => {
+    document.documentElement.dataset.heroPattern = nextPattern;
+    localStorage.setItem('hero-pattern-storage', nextPattern);
+    setHeroPattern(nextPattern);
   };
 
   const selectPatternOpacity = (nextOpacity: number) => {
-    localStorage.setItem('background-pattern-opacity-storage', String(nextOpacity));
+    localStorage.setItem('hero-pattern-opacity-storage', String(nextOpacity));
     setPatternOpacity(nextOpacity);
   };
 
@@ -157,28 +156,28 @@ export function DesignPicker() {
         ))}
       </div>
       <div className="h-px bg-border" />
-      <div className="px-1 text-xs font-medium text-muted-foreground">Background</div>
-      <div className="flex justify-center gap-2" role="group" aria-label="Section background pattern">
-        {backgroundPatternOptions.map((option) => (
+      <div className="px-1 text-xs font-medium text-muted-foreground">Hero</div>
+      <div className="flex justify-center gap-2" role="group" aria-label="Hero background pattern">
+        {heroPatternOptions.map((option) => (
           <PatternSwatch
             key={option.value}
             option={option}
-            isSelected={backgroundPattern === option.value}
-            onSelect={selectBackgroundPattern}
+            isSelected={heroPattern === option.value}
+            onSelect={selectHeroPattern}
           />
         ))}
       </div>
-      <label className="grid gap-2 text-[10px] text-muted-foreground" htmlFor="background-pattern-opacity">
+      <label className="grid gap-2 text-[10px] text-muted-foreground" htmlFor="hero-pattern-opacity">
         <span className="flex items-center justify-between">
           Opacity
-          <output htmlFor="background-pattern-opacity" className="text-foreground">{patternOpacity}%</output>
+          <output htmlFor="hero-pattern-opacity" className="text-foreground">{patternOpacity}%</output>
         </span>
         <input
-          id="background-pattern-opacity"
+          id="hero-pattern-opacity"
           type="range"
-          min={backgroundPatternOpacity.minimum}
-          max={backgroundPatternOpacity.maximum}
-          step={backgroundPatternOpacity.step}
+          min={heroPatternOpacity.minimum}
+          max={heroPatternOpacity.maximum}
+          step={heroPatternOpacity.step}
           value={patternOpacity}
           onChange={(event) => selectPatternOpacity(Number(event.currentTarget.value))}
           className="w-full accent-brand"

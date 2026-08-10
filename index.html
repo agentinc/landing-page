@@ -28,10 +28,9 @@
               window.matchMedia('(prefers-color-scheme: dark)').matches)
           var root = document.documentElement
           var accent = localStorage.getItem('accent-storage')
-          var backgroundPattern =
-            localStorage.getItem('background-pattern-storage') || localStorage.getItem('hero-pattern-storage')
+          var heroPattern = localStorage.getItem('hero-pattern-storage')
           root.dataset.accent = accent || 'blue'
-          root.dataset.backgroundPattern = backgroundPattern || 'lines'
+          root.dataset.heroPattern = heroPattern || 'lines'
           root.classList.toggle('dark', dark)
           root.classList.toggle('light', !dark)
           root.style.colorScheme = dark ? 'dark' : 'light'
