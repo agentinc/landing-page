@@ -803,7 +803,7 @@ function TeamsPricingCard({
       <dl className="my-7 divide-y divide-border border-y border-border">
         <PricingFact
           label="Agents"
-          value={`${selectedPlan.agents} ${selectedPlan.agents === 1 ? 'agent' : 'agents'}`}
+          value={String(selectedPlan.agents)}
         />
         <ApiKeyFact startingCredits={selectedPlan.startingCredits} />
       </dl>
