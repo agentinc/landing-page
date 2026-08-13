@@ -172,54 +172,61 @@ function Header({
   onNavigate: (target: string) => void;
 }) {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-5">
-      <div className="mx-auto max-w-7xl rounded-full border border-brand/20 bg-background/95 px-4 py-2.5 shadow-sm sm:px-5">
-        <div className="flex items-center justify-between gap-3">
+    <header className='fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-5'>
+      <div className='mx-auto max-w-7xl rounded-full border border-brand/20 bg-background/95 pl-4 py-2.5 pr-2.5 shadow-sm sm:pl-5'>
+        <div className='flex items-center justify-between gap-3'>
           <button
-            type="button"
+            type='button'
             onClick={() => onNavigate('top')}
-            className="flex shrink-0 items-center gap-2.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label="Go to the top of the page"
+            className='flex shrink-0 items-center gap-2.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            aria-label='Go to the top of the page'
           >
             <Logo width={23} />
-            <span className="text-base font-semibold tracking-tight sm:text-lg">agentinc</span>
+            <span className='text-base font-semibold tracking-tight sm:text-lg'>
+              agentinc
+            </span>
           </button>
 
-          <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary navigation">
+          <nav
+            className='hidden items-center gap-6 lg:flex'
+            aria-label='Primary navigation'
+          >
             {navigation.map((item) => (
               <button
                 key={item.target}
-                type="button"
+                type='button'
                 onClick={() => onNavigate(item.target)}
-                className="rounded-full text-sm text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className='rounded-full text-sm text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
               >
                 {item.label}
               </button>
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className='flex items-center gap-2'>
             <ThemeToggle />
             <Button
-              type="button"
+              type='button'
               onClick={() => onNavigate('beta')}
-              className="hidden h-10 rounded-full px-5 sm:inline-flex"
+              className='hidden h-10 rounded-full px-6 sm:inline-flex'
             >
               Get early access
-              <ArrowRightIcon aria-hidden="true" />
+              <ArrowRightIcon aria-hidden='true' />
             </Button>
             <button
-              type="button"
+              type='button'
               onClick={onMenuToggle}
-              className="inline-flex size-10 items-center justify-center rounded-full border border-border text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
+              className='inline-flex size-10 items-center justify-center rounded-full border border-border text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden'
               aria-expanded={mobileMenuOpen}
-              aria-controls="mobile-navigation"
-              aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'}
+              aria-controls='mobile-navigation'
+              aria-label={
+                mobileMenuOpen ? 'Close navigation' : 'Open navigation'
+              }
             >
               {mobileMenuOpen ? (
-                <XIcon aria-hidden="true" className="size-4" />
+                <XIcon aria-hidden='true' className='size-4' />
               ) : (
-                <ListIcon aria-hidden="true" className="size-4" />
+                <ListIcon aria-hidden='true' className='size-4' />
               )}
             </button>
           </div>
@@ -227,27 +234,27 @@ function Header({
 
         {mobileMenuOpen && (
           <nav
-            id="mobile-navigation"
-            className="mt-3 grid gap-1 border-t border-border pt-3 lg:hidden"
-            aria-label="Mobile navigation"
+            id='mobile-navigation'
+            className='mt-3 grid gap-1 border-t border-border pt-3 lg:hidden'
+            aria-label='Mobile navigation'
           >
             {navigation.map((item) => (
               <button
                 key={item.target}
-                type="button"
+                type='button'
                 onClick={() => onNavigate(item.target)}
-                className="rounded-lg px-3 py-2.5 text-left text-sm text-muted-foreground"
+                className='rounded-lg px-3 py-2.5 text-left text-sm text-muted-foreground'
               >
                 {item.label}
               </button>
             ))}
             <Button
-              type="button"
+              type='button'
               onClick={() => onNavigate('beta')}
-              className="mt-2 rounded-full sm:hidden"
+              className='mt-2 rounded-full sm:hidden'
             >
               Get early access
-              <ArrowRightIcon aria-hidden="true" />
+              <ArrowRightIcon aria-hidden='true' />
             </Button>
           </nav>
         )}
@@ -676,13 +683,14 @@ function PricingSection({
 
 function PricingHeader() {
   return (
-    <div className="mx-auto max-w-3xl text-center">
-      <p className="text-base font-semibold text-brand">Pricing</p>
-      <h2 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+    <div className='mx-auto max-w-3xl text-center'>
+      <p className='text-5xl font-semibold text-brand'>Pricing</p>
+      <h2 className='mt-4 text-lg font-bold leading-tight tracking-tight sm:text-2xl'>
         Start with one agent. Grow into a team.
       </h2>
-      <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-        Choose the agent capacity that fits your business today, then expand when you need more.
+      <p className='mx-auto mt-5  text-lg leading-relaxed text-muted-foreground'>
+        Choose the agent capacity that fits your business today, then expand
+        when you need more.
       </p>
     </div>
   );
@@ -828,27 +836,28 @@ function DeveloperPricingCard({
   onSelectPlan: (planId: string, billing: BillingInterval) => void;
 }) {
   return (
-    <article className="flex min-h-full flex-col rounded-2xl border border-brand/25 bg-background p-6 sm:p-7">
-      <div>
-        <p className="text-sm font-medium text-brand">Developer</p>
-        <h3 className="mt-2 text-2xl font-semibold tracking-tight">{developerPlan.name}</h3>
+    <article className='flex min-h-full flex-col rounded-2xl border border-brand/25 bg-background p-6 sm:p-7'>
+      <div className='space-y-2'>
+        <p className='text-sm font-medium text-brand'>Developer</p>
+        <h3 className='mt-2 text-2xl font-semibold tracking-tight'>
+          {developerPlan.name}
+        </h3>
+        <div className=''>
+          <PlanPrice plan={developerPlan} billing={billing} />
+        </div>
       </div>
-      <p className="mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground">
-        For developers who want to create, publish, and sell agents through the Agentinc marketplace.
+      <p className='mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground'>
+        For developers who want to create, publish, and sell agents through the
+        Agentinc marketplace.
       </p>
-
-      <div className="mt-16">
-        <PlanPrice plan={developerPlan} billing={billing} />
-      </div>
-
       <Button
-        type="button"
-        variant="outline"
+        type='button'
+        variant='outline'
         onClick={() => onSelectPlan(developerPlan.id, billing)}
-        className="mt-auto w-full rounded-full border-primary/30 bg-transparent text-primary"
+        className='mt-auto w-full rounded-full border-primary/30 bg-transparent text-primary'
       >
         Get developer access
-        <ArrowRightIcon aria-hidden="true" />
+        <ArrowRightIcon aria-hidden='true' />
       </Button>
     </article>
   );
