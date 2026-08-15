@@ -47,37 +47,39 @@ export function ContactUs({ defaultPlan, defaultBilling }: { defaultPlan: string
 function BetaRequestFields({ defaultPlan, defaultBilling }: { defaultPlan: string; defaultBilling: BillingInterval }) {
   return (
     <>
-      <div className="space-y-2">
-        <Label htmlFor="email">Work email</Label>
+      <div className='space-y-2'>
+        <Label htmlFor='email'>Work email</Label>
         <Input
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          placeholder="you@company.com"
+          id='email'
+          name='email'
+          type='email'
+          autoComplete='email'
+          placeholder='you@company.com'
           required
-          className="h-12 rounded-xl bg-muted px-4"
+          className='h-12 rounded-xl bg-muted px-4'
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className='grid gap-5 sm:grid-cols-2'>
         <RoleSelect />
         <BusinessFunctionSelect />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <PlanSelect defaultPlan={defaultPlan} />
+      <div className='grid gap-5 sm:grid-cols-2'>
+        {/* <PlanSelect defaultPlan={defaultPlan} /> */}
         <BillingSelect defaultBilling={defaultBilling} />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="useCase">What would you like your agent team to handle?</Label>
+      <div className='space-y-2'>
+        <Label htmlFor='useCase'>
+          What would you like your agent team to handle?
+        </Label>
         <Textarea
-          id="useCase"
-          name="use_case"
-          placeholder="Describe the work, process, or business goal you would like help with"
+          id='useCase'
+          name='use_case'
+          placeholder='Describe the work, process, or business goal you would like help with'
           required
-          className="min-h-28 resize-none rounded-xl bg-muted px-4 py-3"
+          className='min-h-28 resize-none rounded-xl bg-muted px-4 py-3'
         />
       </div>
     </>
@@ -121,19 +123,19 @@ function BusinessFunctionSelect() {
   );
 }
 
-function PlanSelect({ defaultPlan }: { defaultPlan: string }) {
-  return (
-    <div className="space-y-2">
-      <Label htmlFor="plan">Plan interest</Label>
-      <select id="plan" name="plan" required defaultValue={defaultPlan} className={selectClassName}>
-        <option value="" disabled>Choose a plan</option>
-        {pricingPlans.map((plan) => (
-          <option key={plan.id} value={plan.id}>{plan.name}</option>
-        ))}
-      </select>
-    </div>
-  );
-}
+// function PlanSelect({ defaultPlan }: { defaultPlan: string }) {
+//   return (
+//     <div className="space-y-2">
+//       <Label htmlFor="plan">Plan interest</Label>
+//       <select id="plan" name="plan" required defaultValue={defaultPlan} className={selectClassName}>
+//         <option value="" disabled>Choose a plan</option>
+//         {pricingPlans.map((plan) => (
+//           <option key={plan.id} value={plan.id}>{plan.name}</option>
+//         ))}
+//       </select>
+//     </div>
+//   );
+// }
 
 function BillingSelect({ defaultBilling }: { defaultBilling: BillingInterval }) {
   return (

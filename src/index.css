@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -39,6 +40,7 @@
   --color-footer-foreground: var(--footer-foreground);
   --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  --font-google-sans: "Google Sans", sans-serif;
 }
 
 :root {
