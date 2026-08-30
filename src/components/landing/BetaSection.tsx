@@ -9,7 +9,7 @@ type BetaSectionProps = {
 
 const benefits = [
   'Help choosing the right agents',
-  'Agentinc-assisted customization',
+  'Fleet-assisted customization',
   'One workspace for your growing team',
 ];
 

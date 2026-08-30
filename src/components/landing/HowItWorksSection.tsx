@@ -6,7 +6,7 @@ import { WrenchIcon } from '@phosphor-icons/react/dist/csr/Wrench';
 const adoptionSteps = [
   { title: 'Find the right agents', description: 'Browse by business function, task, or goal to find specialists suited to the work.', icon: MagnifyingGlassIcon },
   { title: 'Connect your business', description: 'Choose the tools and information each agent needs to work with your team.', icon: PlugsConnectedIcon },
-  { title: 'Make them yours', description: 'Agentinc helps tailor responsibilities, knowledge, access, and approval rules.', icon: WrenchIcon },
+  { title: 'Make them yours', description: 'Fleet helps tailor responsibilities, knowledge, access, and approval rules.', icon: WrenchIcon },
   { title: 'Assemble your team', description: 'Bring specialists together in one workspace and start putting them to work.', icon: UsersThreeIcon },
 ];
 

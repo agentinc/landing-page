@@ -27,12 +27,12 @@ export function CustomizationSection() {
               </div>
             ))}
           </div>
-          <div className='mt-2 rounded-xl bg-muted px-4 py-3 text-sm text-muted-foreground'>Configured with help from the Agentinc team</div>
+          <div className='mt-2 rounded-xl bg-muted px-4 py-3 text-sm text-muted-foreground'>Configured with help from the Fleet team</div>
         </div>
         <div className='order-1 lg:order-2'>
           <p className='text-base font-semibold text-brand'>Customized for you</p>
           <h2 className='mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl'>Built around the way your company works.</h2>
-          <p className='mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground'>Start with a ready-made agent or work with Agentinc to tailor one around your processes, knowledge, policies, and tools.</p>
+          <p className='mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground'>Start with a ready-made agent or work with Fleet to tailor one around your processes, knowledge, policies, and tools.</p>
         </div>
       </div>
     </section>

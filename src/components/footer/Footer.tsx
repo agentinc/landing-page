@@ -10,10 +10,10 @@ export function Footer({ onNavigate }: FooterProps) {
       <div className='mx-auto flex max-w-7xl flex-col gap-5 text-sm text-footer-foreground/60 sm:flex-row sm:items-center sm:justify-between'>
         <button type='button' onClick={() => onNavigate('top')} className='flex items-center gap-2 text-footer-foreground'>
           <Logo width={19} />
-          <span className='font-medium font-mono'>agentinc</span>
+          <span className='font-medium font-mono'>fleet</span>
         </button>
         <p>Find, customize, and manage your AI agent team.</p>
-        <p>&copy; 2026 agentinc.</p>
+        <p>&copy; 2026 fleet.</p>
       </div>
     </footer>
   );
