@@ -16,14 +16,14 @@ export function ContactUs({ defaultPlan, defaultBilling }: { defaultPlan: string
       <div className="mb-7">
         <h3 className="text-2xl font-semibold tracking-tight">Request beta access</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Tell us where your business needs support and we will follow up about early access.
+          A few details to start. We will follow up with the right technical context.
         </p>
       </div>
 
       <form action="https://api.web3forms.com/submit" method="POST" className="space-y-5">
         <input type="hidden" name="access_key" value={accessKey} />
-        <input type="hidden" name="subject" value="Fleet private beta request" />
-        <input type="hidden" name="from_name" value="Fleet landing page" />
+        <input type="hidden" name="subject" value="Agentinc private beta request" />
+        <input type="hidden" name="from_name" value="Agentinc landing page" />
 
         <BetaRequestFields defaultPlan={defaultPlan} defaultBilling={defaultBilling} />
 
@@ -37,7 +37,7 @@ export function ContactUs({ defaultPlan, defaultBilling }: { defaultPlan: string
         </Button>
 
         <p className="text-center text-xs leading-relaxed text-muted-foreground">
-          We will use these details only to follow up about your request.
+          No sales sequence. Just a technical conversation about your agent.
         </p>
       </form>
     </div>
@@ -47,39 +47,37 @@ export function ContactUs({ defaultPlan, defaultBilling }: { defaultPlan: string
 function BetaRequestFields({ defaultPlan, defaultBilling }: { defaultPlan: string; defaultBilling: BillingInterval }) {
   return (
     <>
-      <div className='space-y-2'>
-        <Label htmlFor='email'>Work email</Label>
+      <div className="space-y-2">
+        <Label htmlFor="email">Work email</Label>
         <Input
-          id='email'
-          name='email'
-          type='email'
-          autoComplete='email'
-          placeholder='you@company.com'
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          placeholder="you@company.com"
           required
-          className='h-12 rounded-xl bg-muted px-4'
+          className="h-12 rounded-xl bg-muted px-4"
         />
       </div>
 
-      <div className='grid gap-5 sm:grid-cols-2'>
+      <div className="grid gap-5 sm:grid-cols-2">
         <RoleSelect />
-        <BusinessFunctionSelect />
+        <FrameworkSelect />
       </div>
 
-      <div className='grid gap-5 sm:grid-cols-2'>
-        {/* <PlanSelect defaultPlan={defaultPlan} /> */}
+      <div className="grid gap-5 sm:grid-cols-2">
+        <PlanSelect defaultPlan={defaultPlan} />
         <BillingSelect defaultBilling={defaultBilling} />
       </div>
 
-      <div className='space-y-2'>
-        <Label htmlFor='useCase'>
-          What would you like your agent team to handle?
-        </Label>
+      <div className="space-y-2">
+        <Label htmlFor="useCase">What do you want to run?</Label>
         <Textarea
-          id='useCase'
-          name='use_case'
-          placeholder='Describe the work, process, or business goal you would like help with'
+          id="useCase"
+          name="use_case"
+          placeholder="A short description of your agent or deployment use case"
           required
-          className='min-h-28 resize-none rounded-xl bg-muted px-4 py-3'
+          className="min-h-28 resize-none rounded-xl bg-muted px-4 py-3"
         />
       </div>
     </>
@@ -92,50 +90,46 @@ function RoleSelect() {
       <Label htmlFor="role">Your role</Label>
       <select id="role" name="role" required defaultValue="" className={selectClassName}>
         <option value="" disabled>Choose a role</option>
-        <option value="business-owner">Business owner</option>
-        <option value="founder-ceo">Founder or CEO</option>
-        <option value="operations-leader">Operations leader</option>
-        <option value="department-leader">Department leader</option>
         <option value="developer">Developer</option>
+        <option value="engineering-leader">Engineering leader</option>
+        <option value="founder">Founder</option>
+        <option value="platform-team">Platform team</option>
         <option value="other">Other</option>
       </select>
     </div>
   );
 }
 
-function BusinessFunctionSelect() {
+function FrameworkSelect() {
   return (
     <div className="space-y-2">
-      <Label htmlFor="businessFunction">Where do you need support?</Label>
-      <select id="businessFunction" name="business_function" required defaultValue="" className={selectClassName}>
-        <option value="" disabled>Choose a function</option>
-        <option value="engineering">Engineering</option>
-        <option value="customer-service">Customer service</option>
-        <option value="finance">Finance</option>
-        <option value="hr">Human resources</option>
-        <option value="sales">Sales</option>
-        <option value="marketing">Marketing</option>
-        <option value="operations">Operations</option>
-        <option value="research">Research and analysis</option>
-        <option value="other">Other</option>
+      <Label htmlFor="framework">Current framework</Label>
+      <select id="framework" name="framework" required defaultValue="" className={selectClassName}>
+        <option value="" disabled>Choose one</option>
+        <option value="openai">OpenAI</option>
+        <option value="anthropic">Anthropic</option>
+        <option value="langchain">LangChain or LangGraph</option>
+        <option value="crewai">CrewAI</option>
+        <option value="custom">Custom Python</option>
+        <option value="evaluating">Still evaluating</option>
       </select>
     </div>
   );
 }
 
-// function PlanSelect({ defaultPlan }: { defaultPlan: string }) {
-//   return (
-//     <div className="space-y-2">
-//       <Label htmlFor="plan">Plan interest</Label>
-//       <select id="plan" name="plan" required defaultValue={defaultPlan} className={selectClassName}>
-//         <option value="" disabled>Choose a plan</option>
-//         {pricingPlans.map((plan) => (
-//           <option key={plan.id} value={plan.id}>{plan.name}</option>
-//         ))}
-//       </select>
-//     </div>
-//   );
-// }
+function PlanSelect({ defaultPlan }: { defaultPlan: string }) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor="plan">Plan interest</Label>
+      <select id="plan" name="plan" required defaultValue={defaultPlan} className={selectClassName}>
+        <option value="" disabled>Choose a plan</option>
+        {pricingPlans.map((plan) => (
+          <option key={plan.id} value={plan.id}>{plan.name}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
 
 function BillingSelect({ defaultBilling }: { defaultBilling: BillingInterval }) {
   return (
@@ -143,7 +137,7 @@ function BillingSelect({ defaultBilling }: { defaultBilling: BillingInterval }) 
       <Label htmlFor="billing">Billing preference</Label>
       <select id="billing" name="billing" required defaultValue={defaultBilling} className={selectClassName}>
         <option value="monthly">Monthly</option>
-        <option value="annual">Annual</option>
+        <option value="annual">Annual, 2 months free</option>
       </select>
     </div>
   );
