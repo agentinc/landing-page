@@ -63,12 +63,12 @@ function AgentWorkspacePreview() {
   ];
 
   return (
-    <figure className='relative mx-auto w-full max-w-xl' aria-label='Building an AI agent team with Agentinc'>
+    <figure className='relative mx-auto w-full max-w-xl' aria-label='Building an AI agent team with Fleet'>
       <div className='overflow-hidden rounded-2xl border border-brand/20 bg-card'>
         <div className='flex items-center justify-between border-b border-border px-5 py-4'>
           <div className='flex items-center gap-2 text-sm font-medium'>
             <BriefcaseIcon aria-hidden='true' className='size-4 text-brand' />
-            Your Agentinc workspace
+            Your Fleet workspace
           </div>
           <span className='rounded-full border border-brand/25 px-2.5 py-1 text-[10px] font-medium text-brand'>
             Team setup

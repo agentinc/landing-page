@@ -35,7 +35,7 @@ export function Navbar({
           >
             <Logo width={23} />
             <span className='text-base font-semibold tracking-tight sm:text-lg font-mono'>
-              agentinc
+              fleet
             </span>
           </button>
 

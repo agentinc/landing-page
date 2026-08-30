@@ -45,7 +45,7 @@ export function DeveloperPricingCard({ plan, billing, onSelectPlan }: { plan: Pr
         <h3 className='mt-2 text-2xl font-semibold tracking-tight'>{plan.name}</h3>
         <PlanPrice plan={plan} billing={billing} />
       </div>
-      <p className='mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground'>For developers who want to create, publish, and sell agents through the Agentinc marketplace.</p>
+      <p className='mt-3 min-h-12 text-sm leading-relaxed text-muted-foreground'>For developers who want to create, publish, and sell agents through the Fleet marketplace.</p>
       <Button type='button' variant='outline' onClick={() => onSelectPlan(plan.id, billing)} className='mt-auto w-full rounded-full border-primary/30 bg-transparent text-primary'>
         Get developer access
         <ArrowRightIcon aria-hidden='true' />

@@ -18,7 +18,7 @@ export function ControlSection() {
           <div>
             <p className='text-base font-semibold text-brand'>Confidence and control</p>
             <h2 className='mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl'>Stay in control as your agent team grows.</h2>
-            <p className='mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground'>Agentinc gives your organization one clear place to manage access, activity, and responsibility.</p>
+            <p className='mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground'>Fleet gives your organization one clear place to manage access, activity, and responsibility.</p>
           </div>
           <div className='grid border-t border-border sm:grid-cols-2'>
             {controls.map(({ label, icon: Icon }, index) => (

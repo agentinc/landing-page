@@ -22,8 +22,8 @@ export function ContactUs({ defaultPlan, defaultBilling }: { defaultPlan: string
 
       <form action="https://api.web3forms.com/submit" method="POST" className="space-y-5">
         <input type="hidden" name="access_key" value={accessKey} />
-        <input type="hidden" name="subject" value="Agentinc private beta request" />
-        <input type="hidden" name="from_name" value="Agentinc landing page" />
+        <input type="hidden" name="subject" value="Fleet private beta request" />
+        <input type="hidden" name="from_name" value="Fleet landing page" />
 
         <BetaRequestFields defaultPlan={defaultPlan} defaultBilling={defaultBilling} />
 
