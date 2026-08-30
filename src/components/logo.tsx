@@ -4,7 +4,7 @@ const Logo = ({ width = 32 }: { width?: number }) => {
   return (
     <LogoSvg
       aria-hidden="true"
-      className="shrink-0 text-current"
+      className="shrink-0 text-current -rotate-90"
       customColor="currentColor"
       accentColor="currentColor"
       width={width}
